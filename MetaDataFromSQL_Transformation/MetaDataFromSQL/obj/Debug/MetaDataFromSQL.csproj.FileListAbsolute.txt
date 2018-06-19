@@ -1,0 +1,12 @@
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL\MetaDataFromSQL\bin\Debug\MetaDataFromSQL.exe.config
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL\MetaDataFromSQL\bin\Debug\MetaDataFromSQL.exe
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL\MetaDataFromSQL\bin\Debug\MetaDataFromSQL.pdb
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL\MetaDataFromSQL\obj\Debug\MetaDataFromSQL.csprojResolveAssemblyReference.cache
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL\MetaDataFromSQL\obj\Debug\MetaDataFromSQL.exe
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL\MetaDataFromSQL\obj\Debug\MetaDataFromSQL.pdb
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL_Transformation\MetaDataFromSQL\bin\Debug\MetaDataFromSQL.exe.config
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL_Transformation\MetaDataFromSQL\obj\Debug\MetaDataFromSQL.exe
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL_Transformation\MetaDataFromSQL\obj\Debug\MetaDataFromSQL.pdb
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL_Transformation\MetaDataFromSQL\obj\Debug\MetaDataFromSQL.csprojResolveAssemblyReference.cache
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL_Transformation\MetaDataFromSQL\bin\Debug\MetaDataFromSQL.exe
+C:\Users\StevenQuinn\Documents\Dev\MetaDataFromSQL_Transformation\MetaDataFromSQL\bin\Debug\MetaDataFromSQL.pdb

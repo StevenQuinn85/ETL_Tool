@@ -15,6 +15,9 @@ namespace ELTManagement.DataEntryForms
         //The Data set name will be stored in this string variable
         string datasetName;
 
+        //Connection details to the back end database will be extracted using the Appconfig object
+        AppConfig Appdata = new AppConfig();
+
         //Creating a Dictionary Structure to hold all the data properties
         //This Dictionary will be passed to all the pages in the data entry
         //process to collect data for insert to the DB.
@@ -56,22 +59,25 @@ namespace ELTManagement.DataEntryForms
             bool exists = false;
             int count = 0;
             string commandText = "SELECT COUNT(*) FROM [dbo].[Program_DataProperties] WHERE DataSetName = @DataSetName";
-            SqlConnection conn = new SqlConnection(@"Data Source=WINDOWS-I92V0KI\SQLEXPRESS;Initial Catalog=Project;Integrated Security=True;");
+
+            SqlConnection conn = new SqlConnection();
+            //The connection string is pulled from the Appdata
+            conn.ConnectionString = Appdata.ConnectionString;
             SqlCommand comm = new SqlCommand(commandText, conn);
 
             comm.Parameters.AddWithValue("@DataSetName", datasetName);
             comm.Parameters["@DataSetName"].SqlDbType = System.Data.SqlDbType.NVarChar;
 
+            //Execute the command and check if a dataset already exists with the same name
             try
             {
                 conn.Open();
                 count = Convert.ToInt32(comm.ExecuteScalar());
                 conn.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                ErrorLabel.Text = ex.Message;
             }
 
             if (count > 0)
@@ -98,5 +104,6 @@ namespace ELTManagement.DataEntryForms
                 DataProperties["Dataset Name"] = datasetName;
             }
         }
+
     }
 }

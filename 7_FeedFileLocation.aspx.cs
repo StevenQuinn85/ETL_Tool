@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.IO;
 
 namespace ELTManagement
 {
@@ -24,9 +25,17 @@ namespace ELTManagement
 
         protected void btn_Next_Click(object sender, EventArgs e)
         {
-            Session["FileLocation"] = txt_sampleFileLocation.Text;
+            if (File.Exists(txt_sampleFileLocation.Text))
+            {
+                            Session["FileLocation"] = txt_sampleFileLocation.Text;
             Session["DataProperties"] = DataProperties;
             Response.Redirect("7_EnterMetaDataFeedFile.aspx");
+            }
+            else
+            {
+                lbl_FeedFileError.Text = "Check Feed File Exists";
+            }
+
         }
 
         protected void btn_Back_Click(object sender, EventArgs e)

@@ -11,7 +11,7 @@ namespace ELTManagement
 {
     public partial class _5_DirecConnectOracleDestinationDetails : System.Web.UI.Page
     {
-        string connectionString, dataSource, username, password, tableName;
+        string connectionString, dataSource, dbName, username, password, tableName;
         Dictionary<string, string> DataProperties = new Dictionary<string, string>();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -40,12 +40,13 @@ namespace ELTManagement
         protected void btn_Next_Click(object sender, EventArgs e)
         {
             dataSource = txt_DataSource.Text;
+            dbName = txt_dbName.Text;
             username = txt_username.Text;
             password = txt_password.Text;
 
             if (PasswordRequired.Checked)
             {
-                connectionString = "Data Source = " + dataSource + "; User Id =" + username + ";Password = " + password + ";";
+                connectionString = "Data Source = " + dataSource + "; User Id =" + dbName + ";Password = " + password + ";";
             }
             else
             {
@@ -53,6 +54,7 @@ namespace ELTManagement
             }
 
             AddDestinationDataSource(dataSource);
+            AddDestinationDBName(dbName);
             AddDestinationUsername(username);
             AddDestinationPassword(password);
             AddDestinationTableName(tableName);
@@ -68,6 +70,18 @@ namespace ELTManagement
             else if (DataProperties["Import Type"].Equals("Direct Connect"))
             {
                 Response.Redirect("6_MetaDataSelectionDirectConnect.aspx");
+            }
+        }
+
+        private void AddDestinationDBName(string dbName)
+        {
+            if (!DataProperties.ContainsKey("Destination Database"))
+            {
+                DataProperties.Add("Destination Database", dbName);
+            }
+            else
+            {
+                DataProperties["Destination Database"] = dbName;
             }
         }
 
@@ -92,6 +106,11 @@ namespace ELTManagement
                 dataSource = txt_DataSource.Text;
             }
 
+            if (!string.IsNullOrEmpty(txt_dbName.Text))
+            {
+                dbName = txt_dbName.Text;
+            }
+
             if (PasswordRequired.Checked)
             {
                 if (!string.IsNullOrEmpty(txt_username.Text))
@@ -103,14 +122,14 @@ namespace ELTManagement
                     password = txt_password.Text;
                 }
 
-                connectionString = "Data Source = " + dataSource + "; User Id =" + username + ";Password = " + password + ";";
+                connectionString = "Data Source = " + dataSource + "; User Id =" + dbName + ";Password = " + password + ";";
             }
             else
             {
                 connectionString = "Data Source =" + dataSource + "; Integrated Security = yes;";
             }
 
-            if (TestSQLConnection(connectionString))
+            if (TestOracleConnection(connectionString))
             {
                 lbl_result.Text = "Connection Successful";
                 btn_Next.Visible = true;
@@ -187,6 +206,7 @@ namespace ELTManagement
             }
         }
 
+        //Pull the table names from the selected database and provide users with a selection
         private List<string> GetTableNames()
         {
             List<string> TableNames = new List<string>();
@@ -194,7 +214,9 @@ namespace ELTManagement
             string firstEntry = "";
             TableNames.Add(firstEntry);
             OracleConnection conn = new OracleConnection(connectionString);
-            string commString = "SELECT TABLE_NAME,Owner FROM all_tables";
+
+            //select tables names from user created databases, removing the system databases
+            string commString = "SELECT TABLE_NAME, Owner FROM all_tables WHERE OWNER NOT IN ('SYS', 'XDB', 'SYSTEM', 'CTXSYS', 'MDSYS', 'APEX_040000')";
             OracleCommand comm = new OracleCommand(commString, conn);
 
             using (conn)
@@ -216,8 +238,8 @@ namespace ELTManagement
 
             return TableNames;
         }
-
-        private bool TestSQLConnection(string connectionDetails)
+        //This method tests the connection details provided to ensure they are valid
+        private bool TestOracleConnection(string connectionDetails)
         {
             bool success = false;
 

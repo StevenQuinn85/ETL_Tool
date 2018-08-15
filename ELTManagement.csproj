@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6B01DE04-B414-49AE-BD57-1DBD6C587847}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ELTManagement</RootNamespace>
+    <AssemblyName>ELTManagement</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Oracle.DataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="7_LookBackDetails.aspx" />
+    <Content Include="8_ConfirmPageFailure.aspx" />
+    <Content Include="8_ConfirmPageSuccess.aspx" />
+    <Content Include="9_DeleteProcess.aspx" />
+    <Content Include="9_EditProcessDetails.aspx" />
+    <Content Include="9_UpdateDataPropSelection.aspx" />
+    <Content Include="ErrorLogsContent.aspx" />
+    <Content Include="Images\ProcessingImage.gif" />
+    <Content Include="ImportResults.aspx" />
+    <Content Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="4_DestinationSelection.aspx" />
+    <Content Include="5_DirecConnectOracleDestinationDetails.aspx" />
+    <Content Include="5_DirectConnectAccessDestinationDetails.aspx" />
+    <Content Include="5_DirectConnectSQLDestinationDetails.aspx" />
+    <Content Include="6_MetaDataSelectionDirectConnect.aspx" />
+    <Content Include="6_MetaDataSelectionFeedFile.aspx" />
+    <Content Include="7_EnterMetaDataDirectConnect.aspx" />
+    <Content Include="7_EnterMetaDataFeedFile.aspx" />
+    <Content Include="7_FeedFileLocation.aspx" />
+    <Content Include="7_ManualEnterNumOfColumns.aspx" />
+    <Content Include="7_ManuallyEnterMetaData.aspx" />
+    <Content Include="8_ConfirmPage.aspx" />
+    <Content Include="background_tile.JPG" />
+    <Content Include="Configure.aspx" />
+    <Content Include="1_DataSetName.aspx" />
+    <Content Include="1_ImportMethodSelection.aspx" />
+    <Content Include="2_DirectConnectSourceSelection.aspx" />
+    <Content Include="2_FeedFileSourceDetails.aspx" />
+    <Content Include="3_DirectConnectAccessSourceDetails.aspx" />
+    <Content Include="3_DirectConnectOracleSourceDetails.aspx" />
+    <Content Include="3_DirectConnectSQLSourceDetails.aspx" />
+    <Content Include="ErrorLogs.aspx" />
+    <Content Include="Home.aspx" />
+    <Content Include="ImportData.aspx" />
+    <Content Include="mystyle.css" />
+    <Content Include="Reporting.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="4_DestinationSelection.aspx.cs">
+      <DependentUpon>4_DestinationSelection.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="4_DestinationSelection.aspx.designer.cs">
+      <DependentUpon>4_DestinationSelection.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="5_DirecConnectOracleDestinationDetails.aspx.cs">
+      <DependentUpon>5_DirecConnectOracleDestinationDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="5_DirecConnectOracleDestinationDetails.aspx.designer.cs">
+      <DependentUpon>5_DirecConnectOracleDestinationDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="5_DirectConnectAccessDestinationDetails.aspx.cs">
+      <DependentUpon>5_DirectConnectAccessDestinationDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="5_DirectConnectAccessDestinationDetails.aspx.designer.cs">
+      <DependentUpon>5_DirectConnectAccessDestinationDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="5_DirectConnectSQLDestinationDetails.aspx.cs">
+      <DependentUpon>5_DirectConnectSQLDestinationDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="5_DirectConnectSQLDestinationDetails.aspx.designer.cs">
+      <DependentUpon>5_DirectConnectSQLDestinationDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="6_MetaDataSelectionDirectConnect.aspx.cs">
+      <DependentUpon>6_MetaDataSelectionDirectConnect.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="6_MetaDataSelectionDirectConnect.aspx.designer.cs">
+      <DependentUpon>6_MetaDataSelectionDirectConnect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="6_MetaDataSelectionFeedFile.aspx.cs">
+      <DependentUpon>6_MetaDataSelectionFeedFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="6_MetaDataSelectionFeedFile.aspx.designer.cs">
+      <DependentUpon>6_MetaDataSelectionFeedFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_EnterMetaDataDirectConnect.aspx.cs">
+      <DependentUpon>7_EnterMetaDataDirectConnect.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_EnterMetaDataDirectConnect.aspx.designer.cs">
+      <DependentUpon>7_EnterMetaDataDirectConnect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_EnterMetaDataFeedFile.aspx.cs">
+      <DependentUpon>7_EnterMetaDataFeedFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_EnterMetaDataFeedFile.aspx.designer.cs">
+      <DependentUpon>7_EnterMetaDataFeedFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_FeedFileLocation.aspx.cs">
+      <DependentUpon>7_FeedFileLocation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_FeedFileLocation.aspx.designer.cs">
+      <DependentUpon>7_FeedFileLocation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_LookBackDetails.aspx.cs">
+      <DependentUpon>7_LookBackDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_LookBackDetails.aspx.designer.cs">
+      <DependentUpon>7_LookBackDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_ManualEnterNumOfColumns.aspx.cs">
+      <DependentUpon>7_ManualEnterNumOfColumns.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_ManualEnterNumOfColumns.aspx.designer.cs">
+      <DependentUpon>7_ManualEnterNumOfColumns.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="7_ManuallyEnterMetaData.aspx.cs">
+      <DependentUpon>7_ManuallyEnterMetaData.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="7_ManuallyEnterMetaData.aspx.designer.cs">
+      <DependentUpon>7_ManuallyEnterMetaData.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="8_ConfirmPage.aspx.cs">
+      <DependentUpon>8_ConfirmPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="8_ConfirmPage.aspx.designer.cs">
+      <DependentUpon>8_ConfirmPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="8_ConfirmPageFailure.aspx.cs">
+      <DependentUpon>8_ConfirmPageFailure.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="8_ConfirmPageFailure.aspx.designer.cs">
+      <DependentUpon>8_ConfirmPageFailure.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="8_ConfirmPageSuccess.aspx.cs">
+      <DependentUpon>8_ConfirmPageSuccess.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="8_ConfirmPageSuccess.aspx.designer.cs">
+      <DependentUpon>8_ConfirmPageSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="9_DeleteProcess.aspx.cs">
+      <DependentUpon>9_DeleteProcess.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="9_DeleteProcess.aspx.designer.cs">
+      <DependentUpon>9_DeleteProcess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="9_EditProcessDetails.aspx.cs">
+      <DependentUpon>9_EditProcessDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="9_EditProcessDetails.aspx.designer.cs">
+      <DependentUpon>9_EditProcessDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="9_UpdateDataPropSelection.aspx.cs">
+      <DependentUpon>9_UpdateDataPropSelection.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="9_UpdateDataPropSelection.aspx.designer.cs">
+      <DependentUpon>9_UpdateDataPropSelection.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppConfig.cs" />
+    <Compile Include="Configure.aspx.cs">
+      <DependentUpon>Configure.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Configure.aspx.designer.cs">
+      <DependentUpon>Configure.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="1_DataSetName.aspx.cs">
+      <DependentUpon>1_DataSetName.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="1_DataSetName.aspx.designer.cs">
+      <DependentUpon>1_DataSetName.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="1_ImportMethodSelection.aspx.cs">
+      <DependentUpon>1_ImportMethodSelection.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="1_ImportMethodSelection.aspx.designer.cs">
+      <DependentUpon>1_ImportMethodSelection.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="2_DirectConnectSourceSelection.aspx.cs">
+      <DependentUpon>2_DirectConnectSourceSelection.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="2_DirectConnectSourceSelection.aspx.designer.cs">
+      <DependentUpon>2_DirectConnectSourceSelection.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="2_FeedFileSourceDetails.aspx.cs">
+      <DependentUpon>2_FeedFileSourceDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="2_FeedFileSourceDetails.aspx.designer.cs">
+      <DependentUpon>2_FeedFileSourceDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="3_DirectConnectAccessSourceDetails.aspx.cs">
+      <DependentUpon>3_DirectConnectAccessSourceDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="3_DirectConnectAccessSourceDetails.aspx.designer.cs">
+      <DependentUpon>3_DirectConnectAccessSourceDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="3_DirectConnectOracleSourceDetails.aspx.cs">
+      <DependentUpon>3_DirectConnectOracleSourceDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="3_DirectConnectOracleSourceDetails.aspx.designer.cs">
+      <DependentUpon>3_DirectConnectOracleSourceDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="3_DirectConnectSQLSourceDetails.aspx.cs">
+      <DependentUpon>3_DirectConnectSQLSourceDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="3_DirectConnectSQLSourceDetails.aspx.designer.cs">
+      <DependentUpon>3_DirectConnectSQLSourceDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataBaseExtraction.cs" />
+    <Compile Include="DataLoad.cs" />
+    <Compile Include="DataProperties.cs" />
+    <Compile Include="DirectConnect.cs" />
+    <Compile Include="ErrorLogs.aspx.cs">
+      <DependentUpon>ErrorLogs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorLogs.aspx.designer.cs">
+      <DependentUpon>ErrorLogs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorLogsContent.aspx.cs">
+      <DependentUpon>ErrorLogsContent.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorLogsContent.aspx.designer.cs">
+      <DependentUpon>ErrorLogsContent.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Extraction.cs" />
+    <Compile Include="FeedFileExtraction.cs" />
+    <Compile Include="Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportData.aspx.cs">
+      <DependentUpon>ImportData.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImportData.aspx.designer.cs">
+      <DependentUpon>ImportData.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportResults.aspx.cs">
+      <DependentUpon>ImportResults.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImportResults.aspx.designer.cs">
+      <DependentUpon>ImportResults.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MetaData.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Results.cs" />
+    <Compile Include="Transformation.cs" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55277</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55277/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

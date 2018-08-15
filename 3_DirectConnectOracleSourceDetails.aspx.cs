@@ -11,7 +11,7 @@ namespace ELTManagement.DataEntryForms
 {
     public partial class _3_DirectConnectOracleSourceDetails : System.Web.UI.Page
     {
-        string connectionString, dataSource, username, password, tableName;
+        string connectionString, dataSource, dBName, username, password, tableName;
         Dictionary<string, string> DataProperties = new Dictionary<string, string>();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -36,6 +36,11 @@ namespace ELTManagement.DataEntryForms
                 dataSource = txt_DataSource.Text;
             }
 
+            if (!string.IsNullOrEmpty(txt_dbName.Text))
+            {
+                dBName = txt_dbName.Text;
+            }
+
             if (PasswordRequired.Checked)
             {
                 if (!string.IsNullOrEmpty(txt_username.Text))
@@ -47,14 +52,14 @@ namespace ELTManagement.DataEntryForms
                     password = txt_password.Text;
                 }
 
-                connectionString = "Data Source = " + dataSource + "; User Id =" + username + ";Password = " + password + ";";
+                connectionString = "Data Source = " + dataSource + "; User Id =" + dBName + ";Password = " + password + ";";
             }
             else
             {
                 connectionString = "Data Source =" + dataSource + "; Integrated Security = yes;";
             }
 
-            if (TestSQLConnection(connectionString))
+            if (TestOracleConnection(connectionString))
             {
                 lbl_result.Text = "Connection Successful";
                 btn_Next.Visible = true;
@@ -78,11 +83,12 @@ namespace ELTManagement.DataEntryForms
         {
             dataSource = txt_DataSource.Text;
             username = txt_username.Text;
+            dBName = txt_dbName.Text;
             password = txt_password.Text;
 
             if (PasswordRequired.Checked)
             {
-                connectionString = "Data Source = " + dataSource + "; User Id =" + username + ";Password = " + password + ";";
+                connectionString = "Data Source = " + dataSource + "; User Id =" + dBName + ";Password = " + password + ";";
             }
             else
             {
@@ -90,6 +96,7 @@ namespace ELTManagement.DataEntryForms
             }
 
             AddSourceDataSource(dataSource);
+            AddSourceDBName(dBName);
             AddSourceUsername(username);
             AddSourcePassword(password);
             AddSourceTableName(tableName);
@@ -99,6 +106,8 @@ namespace ELTManagement.DataEntryForms
             Response.Redirect("4_DestinationSelection.aspx");
         }
 
+
+        //Pull the table names from the selected database and provide users with a selection
         private List<string> GetTableNames()
         {
             List<string> TableNames = new List<string>();
@@ -106,7 +115,8 @@ namespace ELTManagement.DataEntryForms
             string firstEntry = "";
             TableNames.Add(firstEntry);
             OracleConnection conn = new OracleConnection(connectionString);
-            string commString = "SELECT TABLE_NAME,Owner FROM all_tables";
+            //select tables names from user created databases, removing the system databases
+            string commString = "SELECT TABLE_NAME, Owner FROM all_tables WHERE OWNER NOT IN ('SYS', 'XDB', 'SYSTEM', 'CTXSYS', 'MDSYS', 'APEX_040000')";
             OracleCommand comm = new OracleCommand(commString, conn);
 
             using (conn)
@@ -129,7 +139,8 @@ namespace ELTManagement.DataEntryForms
             return TableNames;
         }
 
-        private bool TestSQLConnection(string connectionDetails)
+        //This method tests the connection details provided to ensure they are valid
+        private bool TestOracleConnection(string connectionDetails)
         {
             bool success = false;
 
@@ -151,6 +162,8 @@ namespace ELTManagement.DataEntryForms
             }
             return success;
         }
+
+        
 
         private void AddSourceConnectionString(string connectionString)
         {
@@ -207,6 +220,18 @@ namespace ELTManagement.DataEntryForms
             else
             {
                 DataProperties["Source Username"] = username;
+            }
+        }
+
+        private void AddSourceDBName(string dBName)
+        {
+            if (!DataProperties.ContainsKey("Source Database Name"))
+            {
+                DataProperties.Add("Source Database Name", dBName);
+            }
+            else
+            {
+                DataProperties["Source Database Name"] = dBName;
             }
         }
 

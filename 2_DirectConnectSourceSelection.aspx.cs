@@ -15,16 +15,11 @@ namespace ELTManagement.DataEntryForms
         protected void Page_Load(object sender, EventArgs e)
         {
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
-
-
-            if (!IsPostBack)
-            {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
-            }
         }
 
         protected void btn_Next_Click(object sender, EventArgs e)
         {
+            //Set the Direct Connection Database type
             if (ServerSelectionList.SelectedIndex == 0)
             {
                 sourceDBType = "SQL Server";

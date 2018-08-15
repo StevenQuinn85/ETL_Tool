@@ -36,7 +36,7 @@
                                     <asp:RadioButtonList ID="ServerSelectionList" runat="server">
                     <asp:ListItem>SQL Server</asp:ListItem>
                     <asp:ListItem>Oracle Database</asp:ListItem>
-                    <asp:ListItem>Access</asp:ListItem>
+                    <asp:ListItem>Access Database</asp:ListItem>
                 </asp:RadioButtonList>
                 </div>
                 <div id="NavButtons">

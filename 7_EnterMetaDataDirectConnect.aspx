@@ -39,7 +39,7 @@
                 <div id="NavButtons">
                     <asp:Button ID="btn_back" runat="server" Text="Back" OnClick="btn_Back_Click" Height="26px" />
                            &nbsp;
-                    <asp:Button ID="btn_Next" runat="server" Text="Next" OnClick="btn_Next_Click" Style="width: 47px" />
+                    <asp:Button ID="btn_Next" runat="server" Text="Next" OnClick="btn_Next_Click" Width="46px" />
                 </div>
             
             </div>

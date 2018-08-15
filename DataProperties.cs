@@ -12,9 +12,11 @@ namespace ELTManagement
 
         protected SqlConnection conn;
 
-        protected string dataSetName, importType, sourcefileLocation, sourcefileName, sourceDelimiterChar, sourceDBType, sourceConnectionString, sourceUsername, sourcePassword, sourceTableName, sourceDataSource, sourceDBName, sourceServerName;
-        protected string destinationType, destinationFileLocation, /*destinationDelimiterChar*/ destinationDBType, destinationConnectionString, destinationUsername, destinationPassword, destinationTableName, destinationDataSource, destinationDBName, destinationServerName;
-        protected bool useLookBack = false;
+        internal string dataSetName, importType, sourcefileLocation, sourcefileName, sourceDelimiterChar, sourceDBType, sourceConnectionString, sourceUsername, sourcePassword, sourceTableName, sourceDataSource, sourceDBName, sourceServerName;
+        internal string destinationType, destinationFileLocation, /*destinationDelimiterChar*/ destinationDBType, destinationConnectionString, destinationUsername, destinationPassword, destinationTableName, destinationDataSource, destinationDBName, destinationServerName;
+        internal bool useLookBack = false;
+        internal int lookBackPeriod;
+        internal string lookbackColumnName;
 
         public DataProperties(SqlConnection Conn)
         {
@@ -63,7 +65,7 @@ namespace ELTManagement
                     DestinationDataSource = reader["DestinationDataSource"].ToString();
                     DestinationDBName = reader["DestinationDatabase"].ToString();
                     DestinationServerName = reader["DestinationServerName"].ToString();
-
+                    
                     string lookBack = reader["UseLookBack"].ToString();
 
                     if (lookBack.Equals("Yes"))
@@ -71,8 +73,8 @@ namespace ELTManagement
                         UseLookBack = true;
                     }
 
-
-                    
+                    LookBackColumnName = reader["LookBackColumnName"].ToString();
+                    LookBackPeriod = Convert.ToInt32(reader["LookBackPeriod"].ToString());
                 }
             }
             conn.Close();
@@ -197,6 +199,32 @@ namespace ELTManagement
         {
             set { useLookBack = value; }
             get { return useLookBack; }
+        }
+
+        public int LookBackPeriod
+        {
+            get
+            {
+                return lookBackPeriod;
+            }
+
+            set
+            {
+                lookBackPeriod = value;
+            }
+        }
+
+        public string LookBackColumnName
+        {
+            get
+            {
+                return lookbackColumnName;
+            }
+
+            set
+            {
+                lookbackColumnName = value;
+            }
         }
     }
 }

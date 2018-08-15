@@ -38,6 +38,8 @@
                   <a href="1_DataSetName.aspx">Configure New Process</a>
                     <br /><br />
                     <a href="9_UpdateDataPropSelection.aspx">Update Exisiting Process</a>
+                                        <br /><br />
+                    <a href="9_DeleteProcess.aspx">Delete Import Process</a>
                 </div>
 
             </div>

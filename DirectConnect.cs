@@ -20,18 +20,29 @@ namespace ELTManagement
         {
             //DataSet Object that will contain contents of file
             DataSet FileContents = new DataSet();
-            //Add the tablename to the FileContents Dataset
+            DateTime LookBackDate = new DateTime();
+
+            SqlConnection conn = new SqlConnection(Properties.SourceConnectionString);
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
 
             string commandText = "Select * from " + Properties.SourceTableName;
 
             if (Properties.UseLookBack)
             {
-                //Use look back query
+                commandText += " WHERE " + Properties.LookBackColumnName + " >= @LookBackPeroid";
+                
+                //Set the look back date to be one second prior to midnight on the date of the look back period.
+                LookBackDate = DateTime.Now.AddDays(-Properties.LookBackPeriod -1).AddHours(-DateTime.Now.Hour +23).AddMinutes(-DateTime.Now.Minute +59).AddSeconds(-DateTime.Now.Second +59);
+
+                comm.Parameters.AddWithValue("@LookBackPeroid", LookBackDate);
+                comm.Parameters["@LookBackPeroid"].SqlDbType = SqlDbType.DateTime;
             }
 
+            comm.CommandText = commandText;
 
-            SqlConnection conn = new SqlConnection(Properties.SourceConnectionString);
-            SqlDataAdapter Adapter = new SqlDataAdapter(commandText, conn);
+            //Pass the SQL Command with the command text, parameters and connection into the adapter
+            SqlDataAdapter Adapter = new SqlDataAdapter(comm);
 
             Adapter.FillSchema(FileContents, SchemaType.Source, Properties.SourceTableName);
             Adapter.Fill(FileContents, Properties.SourceTableName);
@@ -45,9 +56,28 @@ namespace ELTManagement
         {
             //DataSet Object that will contain contents of file
             DataSet FileContents = new DataSet();
-            string commandText = "Select * from " + Properties.SourceTableName;
+            DateTime LookBackDate = new DateTime();
+
             OleDbConnection conn = new OleDbConnection(Properties.SourceConnectionString);
-            OleDbDataAdapter Adapter = new OleDbDataAdapter(commandText, conn);
+            OleDbCommand comm = new OleDbCommand();
+            comm.Connection = conn;
+
+            string commandText = "Select * from " + Properties.SourceTableName;
+
+            if (Properties.UseLookBack)
+            {
+                commandText += " WHERE " + Properties.LookBackColumnName + " >= @LookBackPeroid";
+
+                //Set the look back date to be one second prior to midnight on the date of the look back period.
+                LookBackDate = DateTime.Now.AddDays(-Properties.LookBackPeriod - 1).AddHours(-DateTime.Now.Hour + 23).AddMinutes(-DateTime.Now.Minute + 59).AddSeconds(-DateTime.Now.Second + 59);
+
+                comm.Parameters.AddWithValue("@LookBackPeroid", LookBackDate);
+                comm.Parameters["@LookBackPeroid"].OleDbType = OleDbType.DBDate;
+            }
+
+            comm.CommandText = commandText;
+
+            OleDbDataAdapter Adapter = new OleDbDataAdapter(comm);
 
             Adapter.FillSchema(FileContents, SchemaType.Source, Properties.SourceTableName);
             Adapter.Fill(FileContents, Properties.SourceTableName);
@@ -61,14 +91,29 @@ namespace ELTManagement
         {
             //DataSet Object that will contain contents of file
             DataSet FileContents = new DataSet();
+            DateTime LookBackDate = new DateTime();
+
+            OracleConnection conn_oracle = new OracleConnection(Properties.SourceConnectionString);
+            OracleCommand comm = new OracleCommand();
+            comm.Connection = conn_oracle;
 
             string commandText = "Select * from " + Properties.SourceTableName;
 
-            OracleConnection conn_oracle = new OracleConnection(Properties.SourceConnectionString);
-            OracleDataAdapter Adapter_Oracle = new OracleDataAdapter(commandText, conn_oracle);
+            if (Properties.UseLookBack)
+            {
+                commandText += " WHERE " + Properties.LookBackColumnName + " >= :LookBackPeroid";
 
-            //OleDbConnection conn_oracle = new OleDbConnection(Properties.SourceConnectionString);
-            //OleDbDataAdapter Adapter_Oracle = new OleDbDataAdapter(commandText, conn_oracle);
+                //Set the look back date to be one second prior to midnight on the date of the look back period.
+                LookBackDate = DateTime.Now.AddDays(-Properties.LookBackPeriod - 1).AddHours(-DateTime.Now.Hour + 23).AddMinutes(-DateTime.Now.Minute + 59).AddSeconds(-DateTime.Now.Second + 59);
+
+                comm.Parameters.Add(new OracleParameter("LookBackPeroid", LookBackDate));
+                comm.Parameters["LookBackPeroid"].OracleType = OracleType.DateTime;
+            }
+
+            comm.CommandText = commandText;
+
+            //Pass the SQL Command with the command text, parameters and connection into the adapter
+            OracleDataAdapter Adapter_Oracle = new OracleDataAdapter(comm);
 
             Adapter_Oracle.FillSchema(FileContents, SchemaType.Source, Properties.SourceTableName);
             Adapter_Oracle.Fill(FileContents, Properties.SourceTableName);

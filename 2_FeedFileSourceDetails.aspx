@@ -43,13 +43,13 @@
                             <td>
                                 <asp:Label Text="FileLocation" runat="server" /></td>
                             <td>
-                                <asp:TextBox runat="server" ID="txt_FileLocation" /></td>
+                                <asp:TextBox runat="server" ID="txt_FileLocation" Width="250px" /></td>
                         </tr>
                         <tr>
                             <td>
                                 <asp:Label Text="File Name" runat="server" /></td>
                             <td>
-                                <asp:TextBox runat="server" ID="txt_FileName" /></td>
+                                <asp:TextBox runat="server" ID="txt_FileName" Width="250px" /></td>
                         </tr>
                         <tr>
                             <td>

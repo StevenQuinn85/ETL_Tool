@@ -40,14 +40,10 @@ namespace ELTManagement
             //Number of columns entered on previous screen
             NumberOfColumns = Convert.ToInt32(Session["NumOfColumns"]);
 
-            if (!IsPostBack)
-            {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
-            }
 
             if (NumberOfColumns > 0)
             {
-
+                //Create and format the headers to be added to the web form
                 Label lbl_Header = new Label();
                 lbl_Header.Style.Add("margin-right", "10px");
                 lbl_Header.Style.Add("font-weight", "bold");
@@ -104,6 +100,8 @@ namespace ELTManagement
 
                 MetaDataPanel.Controls.Add(new LiteralControl("</br>"));
 
+                //Add the controls to the web form and to a list
+                //The list will be used to extract the control contents in the final stage
                 int count;
                 for (int i = 0; i < NumberOfColumns; i++)
                 {
@@ -154,6 +152,7 @@ namespace ELTManagement
                     List<string> dataTypes = new List<string>();
                     dataTypes.Add("Text");
                     dataTypes.Add("Int");
+                    dataTypes.Add("BigInt");
                     dataTypes.Add("Decimal");
                     dataTypes.Add("Date");
                     DataTypeOptions.DataSource = dataTypes;
@@ -171,7 +170,7 @@ namespace ELTManagement
                     NullsAction.Style.Add("margin-right", "35px");
 
 
-
+                    //Add the controls to the web form
                     MetaDataPanel.Controls.Add(txt_columnOrder);
 
                     MetaDataPanel.Controls.Add(txt_columnName);
@@ -249,7 +248,7 @@ namespace ELTManagement
                 c_ReplaceValue.Add(item.Text);
             }
 
-            //Use Page.Session functionality to pass all of the collected data to final screen.
+            //Use Page.Session functionality to pass all of the collected data to final screen
             Session["ColumnNames"] = c_Names;
             Session["ColumnOrder"] = c_Order;
             Session["DataTypes"] = c_DataTypes;
@@ -262,7 +261,17 @@ namespace ELTManagement
 
             Session["DataProperties"] = DataProperties;
 
-            Response.Redirect("8_ConfirmPage.aspx");
+            //Passing the name of the page to return to if the user press back on the next page
+            Session["ReturnPageName"] = "6_MetaDataSelectionDirectConnect.aspx";
+
+            if (DataProperties["Import Type"].Equals("Direct Connect"))
+            {
+                Response.Redirect("7_LookBackDetails.aspx");
+            }
+            else
+            {
+                Response.Redirect("8_ConfirmPage.aspx");
+            }
         }
     }
 }

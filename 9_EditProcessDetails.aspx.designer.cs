@@ -76,6 +76,42 @@ namespace ELTManagement {
         protected global::System.Web.UI.WebControls.GridView GridViewPrimaryKey;
         
         /// <summary>
+        /// chk_UseLookBack control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_UseLookBack;
+        
+        /// <summary>
+        /// drpLookBackColumns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList drpLookBackColumns;
+        
+        /// <summary>
+        /// txt_lookBackPeriod control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_lookBackPeriod;
+        
+        /// <summary>
+        /// btn_UpdateLookback control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_UpdateLookback;
+        
+        /// <summary>
         /// GridViewMetaData control.
         /// </summary>
         /// <remarks>

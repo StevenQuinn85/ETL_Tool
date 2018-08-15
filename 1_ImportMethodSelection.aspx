@@ -37,7 +37,7 @@
                     <h2>Select Import Method</h2>
                 </div>
                 <div id="PageContent">
-                    <asp:RadioButtonList ID="RadioButtonList1" runat="server">
+                    <asp:RadioButtonList ID="radio_ImportType" runat="server">
                         <asp:ListItem>Feed File Import</asp:ListItem>
                         <asp:ListItem>Direct Connect</asp:ListItem>
                     </asp:RadioButtonList>

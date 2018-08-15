@@ -16,6 +16,9 @@ namespace ELTManagement
 
         SqlConnection conn = new SqlConnection();
 
+        //Connection details for the backend DB will come from a Appconfig object
+        AppConfig AppData;
+
         //int NumberOfColumns;
         Dictionary<string, string> DataProperties = new Dictionary<string, string>();
 
@@ -31,15 +34,15 @@ namespace ELTManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+            //Pull the DB connection details
+            AppData = new AppConfig();
+
+            //conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+            conn.ConnectionString = AppData.ConnectionString;
 
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
 
-            if (!IsPostBack)
-            {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
-            }
-
+            //Receive all of the data properties entered by the user
             c_Names = (List<string>)(Session["ColumnNames"]);
             c_Order = (List<string>)(Session["ColumnOrder"]);
             c_DataTypes = (List<string>)(Session["DataTypes"]);
@@ -50,12 +53,64 @@ namespace ELTManagement
             c_NullAction = (List<string>)(Session["NullAction"]);
             c_ReplaceValue = (List<string>)(Session["ReplacementValue"]);
 
+            //Display the details entered by the user in different sections
             DisplaySourceDetails();
             DisplayDestinationDetails();
             DisplayMetaData();
             DisplayPrimaryKeys();
+
+            //If the import type is direct connect - check if look back options need to be displayed
+            if (DataProperties["Import Type"].Equals("Direct Connect"))
+            {
+                if (DataProperties.ContainsKey("Lookback Option"))
+                {
+                    if (DataProperties["Lookback Option"].Equals("Yes"))
+                    {
+                        DisplayLookBackOption();
+                    }
+                }
+
+            }
+
+
         }
 
+        //Populate the lookback details
+        private void DisplayLookBackOption()
+        {
+            StringBuilder TableText = new StringBuilder();
+
+            TableText.AppendLine("<h4>Look Back Options</h4>");
+            TableText.AppendLine("<table border = '" + "1" + "' cellpadding = '" + "2" + "'>");
+            TableText.AppendLine("<tr>");
+            TableText.AppendLine("<td>Use Lookback:");
+            TableText.AppendLine("</td>");
+            TableText.AppendLine("<td>");
+            TableText.AppendLine(DataProperties["Lookback Option"]);
+            TableText.AppendLine("</td>");
+            TableText.AppendLine("</tr>");
+
+            TableText.AppendLine("<tr>");
+            TableText.AppendLine("<td>Lookback Period:");
+            TableText.AppendLine("</td>");
+            TableText.AppendLine("<td>");
+            TableText.AppendLine(DataProperties["Lookback Period"]);
+            TableText.AppendLine("</td>");
+            TableText.AppendLine("</tr>");
+
+            TableText.AppendLine("<tr>");
+            TableText.AppendLine("<td>Lookback Column: ");
+            TableText.AppendLine("</td>");
+            TableText.AppendLine("<td>");
+            TableText.AppendLine(DataProperties["Lookback Column"]);
+            TableText.AppendLine("</td>");
+            TableText.AppendLine("</tr>");
+            TableText.AppendLine("</table>");
+
+            LookBackDisplay.Text = TableText.ToString();
+        }
+
+        //Poplulate the primary key details
         private void DisplayPrimaryKeys()
         {
             StringBuilder TableText = new StringBuilder();
@@ -72,9 +127,11 @@ namespace ELTManagement
                 TableText.AppendLine("</tr>");
             }
             TableText.AppendLine("</table> </br>");
+
             PrimaryKeyDetails.Text = TableText.ToString();
         }
 
+        //Populate the destination details
         private void DisplayDestinationDetails()
         {
             StringBuilder TableText = new StringBuilder();
@@ -147,7 +204,7 @@ namespace ELTManagement
             TableText.AppendLine("</table> </br>");
             DataDestinationDetails.Text = TableText.ToString();
         }
-
+        //Populate the Metadata details
         private void DisplayMetaData()
         {
             StringBuilder TableText = new StringBuilder();
@@ -199,7 +256,7 @@ namespace ELTManagement
 
             MetaDataDisplay.Text = TableText.ToString();
         }
-
+        //Poplulate the source details
         private void DisplaySourceDetails()
         {
             StringBuilder TableText = new StringBuilder();
@@ -327,6 +384,8 @@ namespace ELTManagement
             }
         }
 
+        //Once the data properties have been loaded to the Database, the metadata and primary key details need to be inserted
+        //using the same processId. This method returns the processId
         private string RetrieveProcessId()
         {
             string commandText = "SELECT [ProcessId] FROM [dbo].[Program_DataProperties] WHERE [DataSetName] = '" + DataProperties["Dataset Name"] + "'";
@@ -335,12 +394,7 @@ namespace ELTManagement
 
             try
             {
-                //SqlDataReader reader = comm.ExecuteReader();
 
-                //while (reader.Read())
-                //{
-                //    processId = reader[0].ToString();
-                //}
                 conn.Open();
                 processId = comm.ExecuteScalar().ToString();
                 conn.Close();
@@ -355,10 +409,11 @@ namespace ELTManagement
 
         }
 
+        //This method loads the data properties entried by the user to the back end DB
         private void LoadDataProperties()
         {
-            string commandText = "INSERT INTO [dbo].[Program_DataProperties] ([DataSetName],[ImportType],[SourceDBType],[SourceTableName],[SourceDatabase],[SourceServerName],[SourceDataSource],[SourceFileLocation],[SourceUserName],[SourcePassword],[SourceConnectionString],[SourceFileName],[SourceDelimiter],[DestinationType],[DestinationFileLocation],[DestinationConnectionString],[DestinationDatabase],[DestinationServerName],[DestinationUsername],[DestinationPassword],[DestinationTableName],[DestinationDataSource],[UseLookBack],[LookBackPeriod]) VALUES (@DataSetName,@ImportType,@SourceDBType,@SourceTableName,@SourceDatabase,@SourceServerName,@SourceDataSource,@SourceFileLocation,@SourceUserName,@SourcePassword,@SourceConnectionString,@SourceFileName,@SourceDelimiter,@DestinationType,@DestinationFileLocation,@DestinationConnectionString,@DestinationDatabase,@DestinationServerName,@DestinationUsername,@DestinationPassword,@DestinationTableName,@DestinationDataSource,@UseLookBack,@LookBackPeriod)";
-            string[] textParameters = { "@DataSetName", "@ImportType", "@SourceDBType", "@SourceTableName", "@SourceDatabase", "@SourceServerName", "@SourceDataSource", "@SourceFileLocation", "@SourceUserName", "@SourcePassword", "@SourceConnectionString", "@SourceFileName", "@SourceDelimiter", "@DestinationType", "@DestinationFileLocation", "@DestinationConnectionString", "@DestinationDatabase", "@DestinationServerName", "@DestinationUsername", "@DestinationPassword", "@DestinationTableName", "@DestinationDataSource", "@UseLookBack" };
+            string commandText = "INSERT INTO [dbo].[Program_DataProperties] ([DataSetName],[ImportType],[SourceDBType],[SourceTableName],[SourceDatabase],[SourceServerName],[SourceDataSource],[SourceFileLocation],[SourceUserName],[SourcePassword],[SourceConnectionString],[SourceFileName],[SourceDelimiter],[DestinationType],[DestinationFileLocation],[DestinationConnectionString],[DestinationDatabase],[DestinationServerName],[DestinationUsername],[DestinationPassword],[DestinationTableName],[DestinationDataSource],[UseLookBack],[LookBackPeriod],[LookBackColumnName]) VALUES (@DataSetName,@ImportType,@SourceDBType,@SourceTableName,@SourceDatabase,@SourceServerName,@SourceDataSource,@SourceFileLocation,@SourceUserName,@SourcePassword,@SourceConnectionString,@SourceFileName,@SourceDelimiter,@DestinationType,@DestinationFileLocation,@DestinationConnectionString,@DestinationDatabase,@DestinationServerName,@DestinationUsername,@DestinationPassword,@DestinationTableName,@DestinationDataSource,@UseLookBack,@LookBackPeriod,@LookbackColumnName)";
+            string[] textParameters = { "@DataSetName", "@ImportType", "@SourceDBType", "@SourceTableName", "@SourceDatabase", "@SourceServerName", "@SourceDataSource", "@SourceFileLocation", "@SourceUserName", "@SourcePassword", "@SourceConnectionString", "@SourceFileName", "@SourceDelimiter", "@DestinationType", "@DestinationFileLocation", "@DestinationConnectionString", "@DestinationDatabase", "@DestinationServerName", "@DestinationUsername", "@DestinationPassword", "@DestinationTableName", "@DestinationDataSource", "@UseLookBack", "@LookbackColumnName" };
 
             SqlCommand comm = new SqlCommand();
             comm.CommandText = commandText;
@@ -371,9 +426,19 @@ namespace ELTManagement
                 comm.Parameters[item].SqlDbType = System.Data.SqlDbType.NVarChar;
             }
 
-            //set look back parameter to be int value of 0
-            comm.Parameters.AddWithValue("@LookBackPeriod", "0");
-            comm.Parameters["@LookBackPeriod"].SqlDbType = System.Data.SqlDbType.Int;
+            if (DataProperties.ContainsKey("Lookback Period") && DataProperties["Lookback Option"].Equals("Yes"))
+            {
+            //set look back parameter to be type int
+            comm.Parameters.AddWithValue("@LookBackPeriod", Convert.ToInt32(DataProperties["Lookback Period"]));
+                comm.Parameters["@LookBackPeriod"].SqlDbType = System.Data.SqlDbType.Int;
+            }
+            else
+            {
+                //set look back to be default
+                comm.Parameters.AddWithValue("@LookBackPeriod", 0);
+                comm.Parameters["@LookBackPeriod"].SqlDbType = System.Data.SqlDbType.Int;
+            }
+
 
             //Move through the Data Properties object and add the values to the parameters
             foreach (var item in DataProperties)
@@ -502,8 +567,27 @@ namespace ELTManagement
                 {
                     comm.Parameters["@DestinationServerName"].Value = item.Value;
                 }
-
             }
+
+            //set the parameters for lookback option and period
+            if (DataProperties.ContainsKey("Lookback Option"))
+            {
+                comm.Parameters["@UseLookBack"].Value = DataProperties["Lookback Option"];
+            }
+            else
+            {
+                comm.Parameters["@UseLookBack"].Value = "No";
+            }
+
+            if (DataProperties.ContainsKey("Lookback Column"))
+            {
+                comm.Parameters["@LookbackColumnName"].Value = DataProperties["Lookback Column"];
+            }
+            else
+            {
+                comm.Parameters["@LookbackColumnName"].Value = "N/A";
+            }
+
 
             try
             {
@@ -519,6 +603,7 @@ namespace ELTManagement
             }
         }
 
+        //This method loads the metadata information entried by the user to the back end DB
         private void LoadMetaData(string processID)
         {
             string[] stringParametersForCommand = { "@ColumnName", "@DataType", "@NullsPermitted", "@NullAction", "@ReplaceValue" };
@@ -557,6 +642,7 @@ namespace ELTManagement
             }
         }
 
+        //This method loads the primary key details entried by the user to the back end DB
         private void LoadPrimaryKeys(string processID)
         {
             string commandText = "INSERT INTO [dbo].[Program_PrimaryKeyData]([ProcessId],[PrimaryKey]) VALUES( @ProcessId, @PKValue)";

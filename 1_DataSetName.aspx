@@ -36,7 +36,7 @@
 
                 <div id ="PageContent">
                                     <asp:Label ID="Label1" runat="server" Text="Dataset Name: "></asp:Label>
-                <asp:TextBox ID="txt_DatasetName" runat="server"></asp:TextBox>
+                <asp:TextBox ID="txt_DatasetName" runat="server" Width ="250px"></asp:TextBox>
                 <asp:Label ID ="ErrorLabel" runat ="server"></asp:Label>
                 <br />
 

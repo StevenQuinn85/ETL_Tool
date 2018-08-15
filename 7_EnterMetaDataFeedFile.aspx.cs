@@ -11,7 +11,10 @@ namespace ELTManagement
 {
     public partial class _7_EnterMetaDataFeedFile : System.Web.UI.Page
     {
+        //number of columns in the source dataset
         int NumberOfColumns;
+
+        //Controls to hold all of the user inputs in relation to the metadata
         List<TextBox> lst_ColumnNames = new List<TextBox>();
         List<TextBox> lst_ColumnOrder = new List<TextBox>();
         List<DropDownList> lst_DataType = new List<DropDownList>();
@@ -42,11 +45,6 @@ namespace ELTManagement
             //File Location From Previous Page
             string fileLocation = (string)(Session["FileLocation"]);
 
-            if (!IsPostBack)
-            {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
-            }
-
             StringBuilder TableText = new StringBuilder();
             string delimter = DataProperties["Source Delimiter"];
 
@@ -54,7 +52,7 @@ namespace ELTManagement
 
             NumberOfColumns = Columns.Count();
 
-
+            //Create and format the headers to be added to the web form
             Label lbl_Header = new Label();
             lbl_Header.Style.Add("margin-right", "10px");
             lbl_Header.Style.Add("font-weight", "bold");
@@ -113,7 +111,8 @@ namespace ELTManagement
 
 
             int count;
-
+            //Add the controls to the web form and to a list
+            //The list will be used to extract the control contents in the final stage
             for (int i = 0; i < NumberOfColumns; i++)
             {
                 //why not i, test this
@@ -165,6 +164,7 @@ namespace ELTManagement
                 List<string> dataTypes = new List<string>();
                 dataTypes.Add("Text");
                 dataTypes.Add("Int");
+                dataTypes.Add("BigInt");
                 dataTypes.Add("Decimal");
                 dataTypes.Add("Date");
                 DataTypeOptions.DataSource = dataTypes;
@@ -182,7 +182,7 @@ namespace ELTManagement
                 NullsAction.Style.Add("margin-right", "35px");
 
 
-
+                //Add the controls to the web form
                 MetaDataPanel.Controls.Add(txt_columnOrder);
 
                 MetaDataPanel.Controls.Add(txt_columnName);
@@ -209,12 +209,19 @@ namespace ELTManagement
 
         }
 
+        //Get the column names from the source feed file
         private string[] GetColumnNames(string filelocation, string delimiter)
         {
-            StreamReader Reader = new StreamReader(filelocation);
-            string[] Columns = Reader.ReadLine().Split(delimiter.ToCharArray());
+            string[] Columns = null;
+            
+            if (File.Exists(filelocation))
+            {
+                StreamReader Reader = new StreamReader(filelocation);
+                Columns = Reader.ReadLine().Split(delimiter.ToCharArray());
 
-            return Columns;
+
+            }
+                return Columns;
 
         }
 
@@ -276,7 +283,17 @@ namespace ELTManagement
 
             Session["DataProperties"] = DataProperties;
 
-            Response.Redirect("8_ConfirmPage.aspx");
+            //Passing the name of the page to return to if the user press back on the next page
+            Session["ReturnPageName"] = "6_MetaDataSelectionDirectConnect.aspx";
+
+            if (DataProperties["Import Type"].Equals("Direct Connect"))
+            {
+                Response.Redirect("7_LookBackDetails.aspx");
+            }
+            else
+            {
+                Response.Redirect("8_ConfirmPage.aspx");
+            }
         }
 
         protected void btn_Back_Click(object sender, EventArgs e)

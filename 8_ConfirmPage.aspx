@@ -42,7 +42,7 @@
                     <br/>
                     <asp:Literal ID="MetaDataDisplay" runat="server"></asp:Literal>
                     <br/>
-
+                    <asp:Literal ID="LookBackDisplay" runat="server"></asp:Literal>
                 </div>
  
                 </div>

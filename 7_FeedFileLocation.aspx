@@ -38,6 +38,7 @@
                 <asp:TextBox ID="txt_sampleFileLocation" runat="server" Width ="250px"></asp:TextBox>
                 </div>
                 <div id="NavButtons">
+                    <asp:Label ID ="lbl_FeedFileError" runat="server"></asp:Label><br />
                     <asp:Button ID="btn_back" runat="server" Text="Back" OnClick="btn_Back_Click" Style="width: 47px; height: 26px;" />
                            &nbsp;
                     <asp:Button ID="btn_Next" runat="server" Text="Next" OnClick="btn_Next_Click" Style="width: 47px" />

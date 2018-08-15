@@ -13,7 +13,7 @@ namespace ELTManagement
 {
     public partial class _9_EditProcessDetails : System.Web.UI.Page
     {
-        
+
         //string to hold the SQL Commands to update the Source and Destination details.
         string SQLSourceCommand;
         string SQLDestinationCommand;
@@ -29,18 +29,20 @@ namespace ELTManagement
         //variables to hold all of the import process details
         string DataSetName, ImportType, SourceDBType, SourceTableName, SourceDatabase, SourceServerName, SourceDataSource, SourceFileLocation, SourceUserName, SourcePassword, SourceConnectionString, SourceFileName, SourceDelimiter, DestinationType, DestinationFileLocation, DestinationConnectionString, DestinationDatabase, DestinationServerName, DestinationUsername, DestinationPassword, DestinationTableName, DestinationDataSource, UseLookBack;
 
+        int ProcessId;
 
+        //List of possible column to be selected for look back filter
+        List<string> listOfLookBackColumns = new List<string>();
 
-        int ProcessId, LookBackPeriod;
+        protected void GridViewMetaData_SelectedIndexChanged1(object sender, EventArgs e)
+        {
 
+        }
 
         protected void GridViewPrimaryKey_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
-
-
-
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -60,7 +62,144 @@ namespace ELTManagement
                 PopulateMetaDataGrid();
                 PopulatePKDataGrid();
                 SetAddNewMetaDataTable();
+                SetLookBackDetails();
             }
+
+        }
+
+        protected void Update_LookBack(object sender, EventArgs e)
+        {
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
+
+            string useLookBack,lookBackColumn;
+            int lookBackPeriod;
+
+            if (chk_UseLookBack.Checked)
+            {
+                useLookBack = "Yes";
+                lookBackColumn = drpLookBackColumns.SelectedValue.ToString();
+                lookBackPeriod = Convert.ToInt32(txt_lookBackPeriod.Text);
+            }
+            else
+            {
+                useLookBack = "No";
+                lookBackColumn = "N/A";
+                lookBackPeriod = 0;
+            }
+
+            string commandText = "UPDATE [dbo].[Program_DataProperties] SET UseLookBack = @UseLookback, LookBackPeriod = @LookBackPeriod, LookBackColumnName = @LookBackColumnName WHERE ProcessId = @ProcessId";
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+            comm.Parameters.AddWithValue("@UseLookback", useLookBack);
+
+            comm.Parameters.AddWithValue("@LookBackPeriod", lookBackPeriod);
+            comm.Parameters["@LookBackPeriod"].SqlDbType = SqlDbType.Int;
+
+            comm.Parameters.AddWithValue("@LookBackColumnName", lookBackColumn);
+
+            comm.CommandText = commandText;
+
+            try
+            {
+                conn.Open();
+
+                comm.ExecuteNonQuery();
+
+                conn.Close();
+
+                updateInfo = "Record updated successfully";
+            }
+            catch (Exception ex)
+            {
+                updateInfo = "Error" + ex.Message;
+                throw;
+            }
+
+
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
+        }
+
+        private void SetLookBackDetails()
+        {
+            //populate the drop down with possible look back column names
+            PopulateLookBackDropDown();
+
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
+            comm.CommandText = "SELECT UseLookBack,LookBackPeriod,LookBackColumnName FROM Program_DataProperties WHERE ProcessId = @ProcessId";
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+
+            string lookBackColumn;
+
+
+            try
+            {
+            conn.Open();
+                SqlDataReader reader = comm.ExecuteReader();
+                while (reader.Read())
+            {
+                if (reader["UseLookBack"].Equals("Yes"))
+                {
+
+                    chk_UseLookBack.Checked = true;
+                    txt_lookBackPeriod.Text = reader["LookBackPeriod"].ToString();
+                    lookBackColumn = reader["LookBackColumnName"].ToString();
+
+                    if (listOfLookBackColumns.Contains(lookBackColumn))
+                    {
+                    drpLookBackColumns.SelectedValue = lookBackColumn;
+                    }
+                    else
+                    {
+                        drpLookBackColumns.SelectedIndex = 0;
+                    }
+
+                }
+            }
+            conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+                throw;
+            }
+
+
+
+        }
+
+        private void PopulateLookBackDropDown()
+        {
+
+            listOfLookBackColumns.Add("");
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
+            comm.CommandText = "SELECT ColumnName FROM [Program_Metadata] WHERE DataType = 'Date' and ProcessId = @ProcessId";
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+
+            //populate the drop down with possible look back column names
+
+            try
+            {
+                conn.Open();
+                SqlDataReader reader = comm.ExecuteReader();
+                while (reader.Read())
+                {
+                    
+                        listOfLookBackColumns.Add(reader["ColumnName"].ToString());
+                }
+
+                drpLookBackColumns.DataSource = listOfLookBackColumns;
+                drpLookBackColumns.DataBind();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+                throw;
+            }
+
 
         }
 
@@ -91,24 +230,27 @@ namespace ELTManagement
 
             GridViewRow currentRow = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
             Label lbldeleteid = (Label)currentRow.FindControl("lblID");
-            conn.Open();
+
             SqlCommand cmd = new SqlCommand("DELETE FROM [dbo].[Program_PrimaryKeyData] WHERE ProcessId = @ProcessId", conn);
             cmd.Parameters.AddWithValue("@ProcessId", processid);
             cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
 
             try
             {
-            cmd.ExecuteNonQuery();
-            conn.Close();
-            PopulatePKDataGrid();
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                updateInfo = "Record Successfully Deleted";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                updateInfo = "Error " + ex.Message;
             }
 
-
+            //Redirect to selection page.
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
         }
 
 
@@ -151,22 +293,34 @@ namespace ELTManagement
 
             GridViewRow currentRow = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
             Label lbldeleteid = (Label)currentRow.FindControl("lblID");
-            conn.Open();
+            
             SqlCommand cmd = new SqlCommand("DELETE FROM [Project].[dbo].[Program_Metadata] where ProcessId = @ProcessId AND ColumnName = @ColumnName", conn);
             cmd.Parameters.AddWithValue("@ProcessId", processid);
             cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
             cmd.Parameters.AddWithValue("@ColumnName", OriginalColumNames[e.RowIndex]);
-            cmd.ExecuteNonQuery();
 
             //Also need to issue command to delete from the PrimaryKey Table if is a primary Key;
 
-            cmd.CommandText = "DELETE FROM Program_PrimaryKeyData where ProcessId = @ProcessId AND PrimaryKey = @ColumnName";
+            cmd.CommandText = "DELETE FROM Program_Metadata where ProcessId = @ProcessId AND ColumnName = @ColumnName";
 
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                updateInfo = "Record Successfully Deleted";
 
-            PopulateMetaDataGrid();
-            PopulatePKDataGrid();
+            }
+            catch (Exception ex)
+            {
+
+                updateInfo = "Error " + ex.Message;
+            }
+
+
+            //Redirect to selection page.
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
 
         }
         protected void GridViewMetaData_RowEditing(object sender, GridViewEditEventArgs e)
@@ -246,23 +400,20 @@ namespace ELTManagement
 
         protected void Add_MetaData_Click(object sender, EventArgs e)
         {
-            SqlCommand cmd  = new SqlCommand();
+            SqlCommand cmd = new SqlCommand();
             string commandText;
             int count = 0;
-            string errorText ="";
+            string errorText = "";
             //This method will add a new record to the Meta Data Type
             //If the record is a Primary Key it will also add it to Primary Key Table
 
             //Step One Add to Meta Data Table
-            string columnName, dataType, NullsPermitted, NullAction, RepalceValue;
-            int columnOrder, minLength, maxLength;
-            bool NullPermitted;
-
+            string columnName;
             columnName = txt_ColumnName.Text;
 
             //Step two check that the column Name doesn't already exist
 
-            commandText = "SELECT COUNT(*) FROM [Project].[dbo].[Program_Metadata] WHERE ProcessId = @ProcessID and ColumnName = @ColumnName";
+            commandText = "SELECT COUNT(*) FROM [Project].[dbo].[Program_Metadata] WHERE ProcessId = @ProcessId and ColumnName = @ColumnName";
             cmd.CommandText = commandText;
             cmd.Connection = conn;
             cmd.Parameters.AddWithValue("@ProcessId", ProcessId);
@@ -283,7 +434,7 @@ namespace ELTManagement
                 //else enter the column to the Meta Data Table and Primary Key Table
                 commandText = "INSERT INTO Program_Metadata (ProcessId, ColumnName, DataType, MinLength, MaxLength, NullsPermitted, NullAction, ReplaceValue, ColumnOrder) VALUES(@ProcessId, @ColumnName, @DataType, @MinLength, @MaxLength, @NullsPermitted, @NullAction, @ReplaceValue, @ColumnOrder)";
                 cmd.CommandText = commandText;
-                cmd.Parameters.AddWithValue("@DataType",drp_DataType.SelectedItem.ToString());
+                cmd.Parameters.AddWithValue("@DataType", drp_DataType.SelectedItem.ToString());
                 cmd.Parameters.AddWithValue("@MinLength", Convert.ToInt32(txt_MinLength.Text));
                 cmd.Parameters.AddWithValue("@MaxLength", Convert.ToInt32(txt_MaxLength.Text));
                 cmd.Parameters.AddWithValue("@NullsPermitted", drp_NullPermitted.SelectedItem.ToString());
@@ -293,9 +444,10 @@ namespace ELTManagement
 
                 try
                 {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                    updateInfo = "Record successfully added";
                 }
                 catch (Exception ex)
                 {
@@ -304,17 +456,13 @@ namespace ELTManagement
                 }
 
                 //step three if the option of Primary Key is selected the column needs to be added to the primary key table
-                //First check if a record already exists.
-                UpdatePrimaryKeyRecord();
-
+                if (check_PrimaryKey.Checked)
+                {
+                    UpdatePrimaryKeyRecord(cmd);
+                }
+                
             }
 
-
-
-
-            //step four refresh the two grid view tables
-            PopulateMetaDataGrid();
-            PopulatePKDataGrid();
 
             //Redirect to selection page.
             Session["UpdateInfo"] = updateInfo;
@@ -322,9 +470,9 @@ namespace ELTManagement
 
         }
 
-        private void UpdatePrimaryKeyRecord()
+        private void UpdatePrimaryKeyRecord(SqlCommand command)
         {
-            SqlCommand cmd = new SqlCommand();
+            SqlCommand cmd = command;
             cmd.Connection = conn;
             int count;
             string errorText;
@@ -574,6 +722,11 @@ namespace ELTManagement
                 SourceInformation.Add(txt_SourceFileName);
                 SourceInformation.Add(txt_SourceFileLocation);
                 SourceInformation.Add(txt_SourceDelimiter);
+
+                foreach (TextBox item in SourceInformation)
+                {
+                    item.Width = 350;//Increase the size of the textbox
+                }
             }
             else if (ImportType.Equals("Direct Connect"))
             {
@@ -626,6 +779,10 @@ namespace ELTManagement
                     SourceInformation.Add(txt_SourceDatabaseName); // 5
                     SourceInformation.Add(txt_SourceServerName); //6
 
+                    foreach (TextBox item in SourceInformation)
+                    {
+                        item.Width = 350;//Increase the size of the textbox
+                    }
 
                     SourceDetailsPanel.Controls.Add(new LiteralControl("<tr><td>"));
                     SourceDetailsPanel.Controls.Add(Lbl_SourceDatabaseName);
@@ -654,6 +811,10 @@ namespace ELTManagement
 
                     SourceInformation.Add(txt_SourceDataSource); // 5
 
+                    foreach (TextBox item in SourceInformation)
+                    {
+                        item.Width = 350;//Increase the size of the textbox
+                    }
 
                     SourceDetailsPanel.Controls.Add(new LiteralControl("<tr><td>"));
                     SourceDetailsPanel.Controls.Add(Lbl_SourceDataSource);
@@ -676,6 +837,10 @@ namespace ELTManagement
 
                     SourceInformation.Add(txt_SourceFileLocation); // 5
 
+                    foreach (TextBox item in SourceInformation)
+                    {
+                        item.Width = 350;//Increase the size of the textbox
+                    }
 
                     SourceDetailsPanel.Controls.Add(new LiteralControl("<tr><td>"));
                     SourceDetailsPanel.Controls.Add(Lbl_SourceFileLocation);
@@ -683,6 +848,11 @@ namespace ELTManagement
                     SourceDetailsPanel.Controls.Add(txt_SourceFileLocation);
                     SourceDetailsPanel.Controls.Add(new LiteralControl("</td></tr>"));
 
+                }
+
+                foreach (TextBox item in SourceInformation)
+                {
+                    item.Width = 350;//Increase the size of the textbox
                 }
 
                 //Add the username, password, table and connection string details
@@ -758,6 +928,11 @@ namespace ELTManagement
                 DestinationInformation.Add(txt_DestinationServerName); //4
                 DestinationInformation.Add(txt_DestinationDatabaseName);//5
 
+                foreach (TextBox item in DestinationInformation)
+                {
+                    item.Width = 350;
+                }
+
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("<tr>"));
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("<td>"));
                 DestinationDetailsPanel.Controls.Add(Lbl_DestinationServerName);
@@ -776,8 +951,6 @@ namespace ELTManagement
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("</td>"));
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("</tr>"));
 
-
-
             }
             else if (DestinationType.Equals("Oracle Database"))
             {
@@ -791,6 +964,11 @@ namespace ELTManagement
                 txt_DestinationDataSource.Text = DestinationDataSource;
 
                 DestinationInformation.Add(txt_DestinationDataSource);//4
+
+                foreach (TextBox item in DestinationInformation)
+                {
+                    item.Width = 350;
+                }
 
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("<tr>"));
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("<td>"));
@@ -816,6 +994,11 @@ namespace ELTManagement
 
                 DestinationInformation.Add(txt_DestinationFileLocation);
 
+                foreach (TextBox item in DestinationInformation)
+                {
+                    item.Width = 350;
+                }
+
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("<tr>"));
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("<td>"));
                 DestinationDetailsPanel.Controls.Add(Lbl_DestinationFileLocation);
@@ -825,6 +1008,11 @@ namespace ELTManagement
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("</td>"));
                 DestinationDetailsPanel.Controls.Add(new LiteralControl("</tr>"));
 
+            }
+
+            foreach (TextBox item in DestinationInformation)
+            {
+                item.Width = 350;
             }
 
             //Add the Labels and Textboxes for TableName, Username, password and connection string

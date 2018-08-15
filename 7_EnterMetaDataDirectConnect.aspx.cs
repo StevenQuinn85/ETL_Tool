@@ -18,6 +18,7 @@ namespace ELTManagement
 
         int NumberOfColumns;
 
+        //Create controls to hold the user's entries
         List<TextBox> lst_ColumnNames = new List<TextBox>();
         List<TextBox> lst_ColumnOrder = new List<TextBox>();
         List<DropDownList> lst_DataType = new List<DropDownList>();
@@ -43,13 +44,9 @@ namespace ELTManagement
         {
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
 
-            if (!IsPostBack)
-            {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
-            }
-
             List<string> Columns = new List<string>();
 
+            //based on the selections made so far pull the column names from the source table
             if (DataProperties["Source Database Type"].Equals("SQL Server"))
             {
                 Columns = GetColumnNames_SQL();
@@ -63,10 +60,10 @@ namespace ELTManagement
                 Columns = GetColumnNames_Access();
             }
 
-
+            //get a count of columns in the dataset
             NumberOfColumns = Columns.Count();
 
-
+            //Create and format the individual headers that will be added to the web form
             Label lbl_Header = new Label();
             lbl_Header.Style.Add("margin-right", "10px");
             lbl_Header.Style.Add("font-weight", "bold");
@@ -125,10 +122,10 @@ namespace ELTManagement
 
 
             int count;
-
+            //For each column in the source dataset add a row of controls to contain the metadata info
+            //each control will be added to a list so the control's contents can be extracted at the final stage
             for (int i = 0; i < NumberOfColumns; i++)
             {
-                //why not i, test this
                 count = i;
 
                 TextBox txt_columnName = new TextBox();
@@ -177,6 +174,7 @@ namespace ELTManagement
                 List<string> dataTypes = new List<string>();
                 dataTypes.Add("Text");
                 dataTypes.Add("Int");
+                dataTypes.Add("BigInt");
                 dataTypes.Add("Decimal");
                 dataTypes.Add("Date");
                 DataTypeOptions.DataSource = dataTypes;
@@ -194,7 +192,7 @@ namespace ELTManagement
                 NullsAction.Style.Add("margin-right", "35px");
 
 
-
+                //add each control to the web form
                 MetaDataPanel.Controls.Add(txt_columnOrder);
 
                 MetaDataPanel.Controls.Add(txt_columnName);
@@ -277,9 +275,22 @@ namespace ELTManagement
 
             Session["DataProperties"] = DataProperties;
 
-            Response.Redirect("8_ConfirmPage.aspx");
-        }
+            //Passing the name of the page to return to if the user press back on the next page
+            Session["ReturnPageName"] = "6_MetaDataSelectionDirectConnect.aspx";
 
+            if (DataProperties["Import Type"].Equals("Direct Connect"))
+            {
+            Response.Redirect("7_LookBackDetails.aspx");
+            }
+            else
+            {
+            Response.Redirect("8_ConfirmPage.aspx");
+            }
+            
+
+            
+        }
+        //Method to get the column names from the source database
         private List<string> GetColumnNames_Access()
         {
             List<string> ColumnNames = new List<string>();
@@ -311,6 +322,7 @@ namespace ELTManagement
             return ColumnNames;
         }
 
+        //Method to get the column names from the source database
         private List<string> GetColumnNames_Oracle()
         {
             List<string> ColumnNames = new List<string>();
@@ -319,7 +331,7 @@ namespace ELTManagement
             //databaseName = DataProperties[""];
             connectionString = DataProperties["Source Connection String"];
 
-            string command = "SELECT COLUMN_NAME FROM ALL_TAB_COLS WHERE TABLE_NAME = '" + tableName + "'";
+            string command = "SELECT COLUMN_NAME FROM ALL_TAB_COLS WHERE TABLE_NAME = '" + tableName + "' ORDER BY COLUMN_ID ASC";
             OracleConnection conn = new OracleConnection(connectionString);
             OracleCommand comm = new OracleCommand(command, conn);
             using (conn)
@@ -348,6 +360,7 @@ namespace ELTManagement
             return ColumnNames;
         }
 
+        //Method to get the column names from the source database
         private List<string> GetColumnNames_SQL()
         {
             List<string> ColumnNames = new List<string>();

@@ -74,9 +74,15 @@
     <Content Include="9_DeleteProcess.aspx" />
     <Content Include="9_EditProcessDetails.aspx" />
     <Content Include="9_UpdateDataPropSelection.aspx" />
+    <Content Include="AdminAddNewUser.aspx" />
+    <Content Include="AdminEditUsers.aspx" />
+    <Content Include="AdminLogin.aspx" />
+    <Content Include="AdminOptions.aspx" />
     <Content Include="ErrorLogsContent.aspx" />
+    <Content Include="Images\icons8-historical-filled-50.png" />
     <Content Include="Images\ProcessingImage.gif" />
     <Content Include="ImportResults.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -241,6 +247,34 @@
     <Compile Include="9_UpdateDataPropSelection.aspx.designer.cs">
       <DependentUpon>9_UpdateDataPropSelection.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminAddNewUser.aspx.cs">
+      <DependentUpon>AdminAddNewUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminAddNewUser.aspx.designer.cs">
+      <DependentUpon>AdminAddNewUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminEditUsers.aspx.cs">
+      <DependentUpon>AdminEditUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminEditUsers.aspx.designer.cs">
+      <DependentUpon>AdminEditUsers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminLogin.aspx.cs">
+      <DependentUpon>AdminLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminLogin.aspx.designer.cs">
+      <DependentUpon>AdminLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminOptions.aspx.cs">
+      <DependentUpon>AdminOptions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminOptions.aspx.designer.cs">
+      <DependentUpon>AdminOptions.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AppConfig.cs" />
     <Compile Include="Configure.aspx.cs">
       <DependentUpon>Configure.aspx</DependentUpon>
@@ -338,6 +372,13 @@
     </Compile>
     <Compile Include="ImportResults.aspx.designer.cs">
       <DependentUpon>ImportResults.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="MetaData.cs" />
     <Compile Include="Program.cs" />

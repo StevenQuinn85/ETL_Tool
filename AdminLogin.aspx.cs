@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace ELTManagement
 {
-    public partial class Login : System.Web.UI.Page
+    public partial class AdminLogin : System.Web.UI.Page
     {
         //Create an AppConfig object to get the connection string
         AppConfig AppData;
@@ -21,11 +21,10 @@ namespace ELTManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
-                AppData = new AppConfig();
-                conn = new SqlConnection();
+            //Set the SQL connection
+            AppData = new AppConfig();
+            conn = new SqlConnection();
                 conn.ConnectionString = AppData.ConnectionString;
-
 
         }
 
@@ -51,26 +50,27 @@ namespace ELTManagement
 
             if ((!string.IsNullOrEmpty(txt_password.Text) && (!string.IsNullOrEmpty(txt_Username.Text))))
             {
-            authenticationSuccessful = CheckCredentials(username,password);
+                authenticationSuccessful = CheckCredentials(username, password);
 
-            if (authenticationSuccessful)
-            {
-                Response.Redirect("Home.aspx");
+                if (authenticationSuccessful)
+                {
+                    //Login and remove and existing status message
+                    Session["UpdateInfo"] = "";
+                    Response.Redirect("AdminOptions.aspx");
 
+                }
+                else
+                {
+                    lbl_error.Text = "** Please Check Login Credentials";
+                }
             }
-            else
-            {
-                lbl_error.Text = "** Please Check Login Credentials";
-            }
-            }
-
 
         }
 
         private bool CheckCredentials(string username, string password)
         {
             bool success = false;
-            string commandtext = "SELECT COUNT(*) FROM [Project].[dbo].[AdminTable] WHERE Username = @Username and Password = @Password;";
+            string commandtext = "SELECT COUNT(*) FROM [Project].[dbo].[AdminTable] WHERE Username = @Username and Password = @Password AND Role = 'Admin';";
             SqlCommand comm = new SqlCommand();
             int count = 0;
 
@@ -84,15 +84,15 @@ namespace ELTManagement
             try
             {
                 conn.Open();
-                 count = Convert.ToInt32(comm.ExecuteScalar());
+                count = Convert.ToInt32(comm.ExecuteScalar());
                 conn.Close();
             }
             catch (Exception)
-            {                
+            {
                 throw;
             }
 
-            if (count>0)
+            if (count > 0)
             {
                 success = true;
             }

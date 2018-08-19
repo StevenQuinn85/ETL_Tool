@@ -25,6 +25,9 @@ namespace ELTManagement
             {
                 updateInfo = (string)Session["UpdateInfo"];
                 lbl_UpdateInfo.InnerText = updateInfo;
+                //reset the update information
+                updateInfo = "";
+                //Create a list of import process and add to the drop downlist
                 InputConversionNames();
             }
         }

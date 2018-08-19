@@ -21,22 +21,40 @@
             </div>
 
             <div id="banner_lower">
+            <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
             </div>
 
 
             <div id="menu">
-                <h2>Home</h2>
-                <a href="ImportData.aspx">ImportData</a>
+                <h2>Menu</h2>
+                <a href="Home.aspx">Home</a>
+                <a href="ImportData.aspx">Import Data</a>
                 <a href="Configure.aspx">Configure</a>
                 <a href="Reporting.aspx">Reporting</a>
-                <a href="ErrorLogs.aspx">ErrorLogs</a>
+                <a href="ErrorLogs.aspx">Error Logs</a>
             </div>
 
             <!--Center Content is the only div to change-->
             <div id="CenterContent">
+                <div id="HomePageRight">
+                    <h3>Recent Imports</h3>
+                    <asp:Literal ID ="lit_RecentImportsTable" runat="server"></asp:Literal>
+                </div>
+                <div id="HomePageLeft">
+                    <h3>ETL Management System</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mauris sit amet purus iaculis interdum. Integer finibus dignissim euismod. Duis id lectus mi. Suspendisse sed libero sit amet libero ullamcorper vestibulum nec sed nulla. Sed augue elit, varius at nisl id, faucibus dapibus metus. Donec sed leo aliquet, porttitor elit in, congue ante. Vestibulum vel lobortis eros. Suspendisse potenti.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mauris sit amet purus iaculis interdum. Integer finibus dignissim euismod. Duis id lectus mi. Suspendisse sed libero sit amet libero ullamcorper vestibulum nec sed nulla. Sed augue elit, varius at nisl id, faucibus dapibus metus. Donec sed leo aliquet, porttitor elit in, congue ante. Vestibulum vel lobortis eros. Suspendisse potenti.</p>
+                   
+                </div>
             </div>
             <!-- closing wrapper-->
+                <div id="footer">
+                ETL Management 2018 | LYIT | <a href="AdminLogin.aspx">Admin Login</a>
+            </div>
+
         </div>
+
+
     </form>
 </body>
 </html>

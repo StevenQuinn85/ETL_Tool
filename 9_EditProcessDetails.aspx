@@ -22,8 +22,9 @@
             <div id="banner_lower">
             </div>
         </div>
-        <div id="menuUpdatePage">
-            <h2>Home</h2>
+        <div id="menu">
+            <h2>Menu</h2>
+                            <a href="Home.aspx">Home</a>
             <a href="ImportData.aspx">Import Data</a>
             <a href="Configure.aspx">Configure</a>
             <a href="Reporting.aspx">Reporting</a>
@@ -48,24 +49,26 @@
                 </tr>
             </table>
 
-            <br />
+            <div id ="updatePageSource">
             <h3>Source Details</h3>
             <asp:Panel ID="SourceDetailsPanel" runat="server"></asp:Panel>
-            <div id="UpdateSource" class="right">
+            <div id="UpdateSource">
                 <br />
-                <asp:Button ID="Update1" runat="server" Text="Update" OnClick="Update_Click" /><br />
+                <asp:Button ID="Update1" runat="server" Text="Update" OnClick="Update_Click"  />
             </div>
-            <br />
+                </div>
+            <hr />
+            <div id ="updatePageDestination">
             <h3>Destination Details</h3>
             <asp:Panel ID="DestinationDetailsPanel" runat="server"></asp:Panel>
 
-            <div id="Update_Destination" class="right">
+            <div id="Update_Destination">
                 <br />
                 <asp:Button ID="Update" runat="server" Text="Update" OnClick="Update_Click" /><br />
             </div>
-
-
-            <br />
+                </div>
+            <hr />
+            <div id ="updatePrimary">
             <h3>Primary Key</h3>
             <asp:GridView ID="GridViewPrimaryKey" runat="server" AutoGenerateColumns="false" DataKeyNames="ProcessID" OnPageIndexChanging="GridViewPK_PageIndexChanging" OnRowDeleting="GridViewPK_RowDeleting" OnSelectedIndexChanged="GridViewPrimaryKey_SelectedIndexChanged" EmptyDataText="No Primary Keys Assigned">
                 <Columns>
@@ -73,8 +76,8 @@
                     <asp:CommandField ShowDeleteButton="true" />
                 </Columns>
             </asp:GridView>
-            <br />
-
+            </div>
+            <hr />
             <div id="Update_LookBack">
                 <h3>Look Back Details Details</h3>
                 <table>
@@ -95,12 +98,15 @@
 
                     </tr>
                 </table>
-                <br />
-                <div id="UpdateLookBack" class="right">
+
+                <div id="UpdateLookBack">
+                    <br />
                     <asp:Button ID="btn_UpdateLookback" runat="server" Text="Update" OnClick="Update_LookBack" /><br />
                 </div>
             </div>
 
+            <hr />
+            <div id="updateMetaData">
             <h3>Metadata Details</h3>
 
 
@@ -118,9 +124,10 @@
                     <asp:CommandField ShowDeleteButton="true" />
                 </Columns>
             </asp:GridView>
-            <br />
+                                </div>
+            <div id="addNewMetaData">
             <h3>Add New Metadata Record</h3>
-            <table>
+            <table border ="1">
                 <tr>
                     <th>Order</th>
                     <th>Column Name</th>
@@ -154,8 +161,9 @@
                     </td>
                 </tr>
             </table>
+                </div>
             <br />
-            <div id="Add_MetaDataRecord" class="right">
+            <div id="Add_MetaDataRecord" >
                 <br />
                 <asp:Button ID="Add_MetaData" runat="server" Text="Insert" OnClick="Add_MetaData_Click" /><br />
                 <asp:Label Text="" runat="server" ID="Lbl_AddMetaError" />
@@ -164,9 +172,8 @@
                 <br />
             </div>
 
-
             <!-- closing wrapper-->
-        </div>
+        </div/>
     </form>
 </body>
 </html>

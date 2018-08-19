@@ -59,7 +59,7 @@ namespace ELTManagement.DataEntryForms
                 connectionString = "Data Source =" + dataSource + "; Integrated Security = yes;";
             }
 
-            if (TestOracleConnection(connectionString))
+            if (TestSQLConnection(connectionString))
             {
                 lbl_result.Text = "Connection Successful";
                 btn_Next.Visible = true;
@@ -107,7 +107,7 @@ namespace ELTManagement.DataEntryForms
         }
 
 
-        //Pull the table names from the selected database and provide users with a selection
+
         private List<string> GetTableNames()
         {
             List<string> TableNames = new List<string>();
@@ -139,8 +139,7 @@ namespace ELTManagement.DataEntryForms
             return TableNames;
         }
 
-        //This method tests the connection details provided to ensure they are valid
-        private bool TestOracleConnection(string connectionDetails)
+        private bool TestSQLConnection(string connectionDetails)
         {
             bool success = false;
 

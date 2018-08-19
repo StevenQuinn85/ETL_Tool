@@ -25,6 +25,20 @@ namespace ELTManagement
 
         private void UpdateStatsTable()
         {
+            if (Stats.ImportSuccessful)
+            {
+                lbl_status.Text = "Import Completed Successfully";
+            }
+            else
+            {
+                lbl_status.Text = "Import Failed : " + Stats.FailureError;
+            }
+
+
+
+            lbl_EndTime.Text = Stats.ImportEndTime.ToString();
+            lbl_StartTime.Text = Stats.ImportStartTime.ToString();
+
             lbl_rawImported.InnerText = Stats.RawDataRecordsImported.ToString();
             lbl_rawOmmited.InnerText = Stats.RawDataRecordsOmitted.ToString();
 

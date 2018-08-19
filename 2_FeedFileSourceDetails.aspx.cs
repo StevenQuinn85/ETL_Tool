@@ -10,7 +10,6 @@ namespace ELTManagement.DataEntryForms
     public partial class _2_FeedFileSourceDetails : System.Web.UI.Page
     {
         Dictionary<string, string> DataProperties = new Dictionary<string, string>();
-
         //String variables to hold the Source Details.
         string fileLocation, fileName, delimiterChar;
 

@@ -22,6 +22,11 @@ namespace ELTManagement.DataEntryForms
             Panel1.Visible = false; Panel2.Visible = false;
             PasswordRequired.Checked = false;
 
+            if (!IsPostBack)
+            {
+                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+            }
+
         }
 
         protected void btn_Test_Click(object sender, EventArgs e)
@@ -101,7 +106,6 @@ namespace ELTManagement.DataEntryForms
             tableName = TableDropDownList.SelectedValue.ToString();
         }
 
-        //Pull the table names from the selected database and provide users with a selection
         private List<string> GetTableNames(string connectionDetails)
         {
             List<string> TableNames = new List<string>();
@@ -127,8 +131,6 @@ namespace ELTManagement.DataEntryForms
                 }
 
             }
-
-
 
             return TableNames;
         }

@@ -40,6 +40,24 @@ namespace ELTManagement {
         protected global::System.Web.UI.WebControls.DropDownList drp_Datasets;
         
         /// <summary>
+        /// LoadingProgress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdateProgress LoadingProgress;
+        
+        /// <summary>
+        /// LoadingPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel LoadingPanel;
+        
+        /// <summary>
         /// btn_Execute control.
         /// </summary>
         /// <remarks>
@@ -47,5 +65,14 @@ namespace ELTManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btn_Execute;
+        
+        /// <summary>
+        /// lbl_processing control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_processing;
     }
 }

@@ -13,21 +13,35 @@ namespace ELTManagement
 {
     public partial class _9_DeleteProcess : System.Web.UI.Page
     {
+        //The application will pull it's SQL Connection to the back end DB from this object
+        AppConfig AppData;
+
+        //Deleting a process will require a connection to the Back End DB
+        SqlConnection conn = new SqlConnection();
+
         protected void Page_Load(object sender, EventArgs e)
-        {
+        {            
+            //Use the connection string from the app data object to connect to the back end DB
+            AppData = new AppConfig();
+            conn.ConnectionString = AppData.ConnectionString;
+
             if (!IsPostBack)
             {
                 PopulateDeleteProcessDataGrid();
-
             }
         }
 
         private void PopulateDeleteProcessDataGrid()
         {
-            SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+
+
+            //Create a delete command
             string commandText = "SELECT  [ProcessId],[DataSetName] FROM [dbo].[Program_DataProperties]";
+            
+            //Link the delete command and SQL connection to a SQL Command
             SqlCommand comm = new SqlCommand(commandText, conn);
+            
+            //Create a Data adapter and Dataset to populate the Grid view with
             SqlDataAdapter da = new SqlDataAdapter(comm);
             DataSet ds = new DataSet();
 
@@ -51,8 +65,7 @@ namespace ELTManagement
         protected void DeleteProcessGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int processId = Convert.ToInt32(DeleteProcessGridView.DataKeys[e.RowIndex].Value.ToString());
-            SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+
             string updateInfo;
             GridViewRow currentRow = (GridViewRow)DeleteProcessGridView.Rows[e.RowIndex];
             Label lbldeleteid = (Label)currentRow.FindControl("lblID");

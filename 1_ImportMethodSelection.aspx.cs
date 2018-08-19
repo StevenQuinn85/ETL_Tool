@@ -22,13 +22,19 @@ namespace ELTManagement.DataEntryForms
         protected void Page_Load(object sender, EventArgs e)
         {
             DataProperties = (Dictionary<string, string>)(Session["DataProperties"]);
-        }
 
+            if (!IsPostBack)
+            {
+                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+
+
+            }
+
+        }
 
 
         protected void btn_Next_Click(object sender, EventArgs e)
         {
-            //Set the import source to be a Feed File
             if (radio_ImportType.SelectedIndex == 0)
             {
                 importType = "Feed File";
@@ -36,7 +42,6 @@ namespace ELTManagement.DataEntryForms
                 Session["DataProperties"] = DataProperties;
                 Response.Redirect("2_FeedFileSourceDetails.aspx");
             }
-            //Or set the import type to be a direct connect to a database
             else if (radio_ImportType.SelectedIndex == 1)
             {
                 importType = "Direct Connect";

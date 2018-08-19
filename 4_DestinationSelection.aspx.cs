@@ -15,9 +15,13 @@ namespace ELTManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
+
+            if (!IsPostBack)
+            {
+                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+            }
         }
 
-        //Return the user to the previous screen based on the selections so far
         protected void btn_Back_Click(object sender, EventArgs e)
         {
             Session["DataProperties"] = DataProperties;

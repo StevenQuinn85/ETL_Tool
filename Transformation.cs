@@ -37,8 +37,8 @@ namespace ELTManagement
             bool nullsAcceptable = false;
             bool replaceNull = false;
             string CurrentColumnName;
-            Stopwatch watch;
             string Errors = "";
+            string rowId = "";
 
 
             if (DataProp.ImportType.Equals("Direct Connect"))
@@ -50,16 +50,21 @@ namespace ELTManagement
                 Table = DataSet.Tables[DataProp.DataSetName];
             }
 
-
+            
             acceptedData = Table.Clone();
-            watch = new Stopwatch();
 
             for (int i = 0; i < Table.Rows.Count; i++)
             {
-                watch.Start();
+                
                 DataRow row = Table.Rows[i];
                 //Identify the row for the error list
-                Errors = "";
+
+                foreach (var item in row.ItemArray)
+                {
+                    rowId += item + "|";
+                }
+
+
 
 
                 for (int j = 0; j < Table.Columns.Count; j++)
@@ -70,115 +75,132 @@ namespace ELTManagement
                     //Check 1.0 - check if value is null
                     if (string.IsNullOrEmpty(row[j].ToString()))
                     {
-                            // Check 1.1 Check if Null is Permitted?
-                            nullsAcceptable = CheckIfNullIsPermitted(row[j].ToString(), CurrentColumnName);
-                            if (!nullsAcceptable)
+                        // Check 1.1 Check if Null is Permitted?
+                        nullsAcceptable = CheckIfNullIsPermitted(row[j].ToString(), CurrentColumnName);
+                        if (!nullsAcceptable)
+                        {
+                            //Check1.2 Check what action to take against Null Values.
+                            replaceNull = NullAction(CurrentColumnName);
+                            if (replaceNull)
                             {
-                                    //Check1.2 Check what action to take against Null Values.
-                                    replaceNull = NullAction(CurrentColumnName);
-                                        if (replaceNull)
-                                        {
-                                            //Replace the Null value with default value for this field
-                                            Table.Rows[i][j] = UpdateNullValue(CurrentColumnName);
-
-                                        }
-                                        else
-                                        {
-                                            //Reject the data Row
-                                            rowAcceptable = false;
-                                           Errors +=  " Column: " + j.ToString() + " Has a null value|"; 
-                                        }
-
+                                //Replace the Null value with default value for this field
+                                Table.Rows[i][j] = UpdateNullValue(CurrentColumnName);
 
                             }
-                    }
-
-                    //Check 2.0 Is the intended data type a string
-                    if (MetaDataRules.DataType[CurrentColumnName].Equals("Text"))
-                    {
-                        //Check 2.1 - check min length
-                        if (!CheckMinLength(Table.Rows[i][j], CurrentColumnName))
-                        {
-                            rowAcceptable = false;
-                            Errors += " Column: " + j.ToString() + " value below minimum threshold|";
-
-                        }
-
-                        //Check 2.1 - check max length
-                        if (!CheckMaxLength(Table.Rows[i][j], CurrentColumnName))
-                        {
-                            rowAcceptable = false;
-                            Errors += " Column: " + j.ToString() + " value above maximum threshold|";
+                            else
+                            {
+                                //Reject the data Row
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " Has a null value|";
+                            }
                         }
                     }
 
-                    //Check 3.0 Is the intended data type an integer value
-                    if (MetaDataRules.DataType[CurrentColumnName].Equals("Int"))
+                    //If after the first check the value is null the remain check for data type can be skipped
+                    //If the value is not null proceed with the checks
+                    if (!string.IsNullOrEmpty(row[j].ToString()))
                     {
-                        //Check 2.1 - check it can be converted to int
-                        if (!CheckValueCanBeConvertedToInt(Table.Rows[i][j].ToString()))
+
+                        //Check 2.0 Is the intended data type a string
+                        if (MetaDataRules.DataType[CurrentColumnName].Equals("Text"))
                         {
-                            rowAcceptable = false;
-                            Errors += " Column: " + j.ToString() + " value cannot be converted to int|";
+                            //Check 2.1 - check min length
+                            if (!CheckMinLength(Table.Rows[i][j], CurrentColumnName))
+                            {
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " value below minimum threshold|";
+
+                            }
+
+                            //Check 2.1 - check max length
+                            if (!CheckMaxLength(Table.Rows[i][j], CurrentColumnName))
+                            {
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " value above maximum threshold|";
+                            }
                         }
+
+                        //Check 3.0 Is the intended data type an integer value
+                        if (MetaDataRules.DataType[CurrentColumnName].Equals("Int"))
+                        {
+                            //Check 2.1 - check it can be converted to int
+                            if (!CheckValueCanBeConvertedToInt(Table.Rows[i][j].ToString()))
+                            {
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " value cannot be converted to int|";
+                            }
+
+                        }
+
+                        //check 4.0 Is the intended data type an Big Int
+                        if (MetaDataRules.DataType[CurrentColumnName].Equals("BitInt"))
+                        {
+                            if (!CheckValueCanBeConvertedToBigInt(Table.Rows[i][j].ToString()))
+                            {
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " value cannot be converted to Big int|";
+                            }
+                        }
+
+                        //Check 5.0 Is the intended data type a decimal value
+                        if (MetaDataRules.DataType[CurrentColumnName].Equals("Decimal"))
+                        {
+                            //Check 2.1 - check it can be converted to decimal
+                            if (!CheckValueCanBeConvertedToFloat(Table.Rows[i][j].ToString()))
+                            {
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " value cannot be converted to decimal|";
+                            }
                             //Action - Convert value ???
 
+                        }
+
+                        //Check 6.0 Is the intended data type a date value
+                        if (MetaDataRules.DataType[CurrentColumnName].Equals("Date"))
+                        {
+                            //Check 2.1 - check it can be converted to date
+                            if (!CheckValueCanBeConvertedToDate(Table.Rows[i][j].ToString()))
+                            {
+                                rowAcceptable = false;
+                                Errors += " Column: " + j.ToString() + " value cannot be converted to date|";
+                            }
+                            else
+                            {
+                                //Action - Convert value to date format
+                                Table.Rows[i][j] = ConvertValueToDateFormat(Table.Rows[i][j].ToString());
+                            }
+                        }
+
                     }
 
-                    //Check 4.0 Is the intended data type a decimal value
-                    if (MetaDataRules.DataType[CurrentColumnName].Equals("Decimal"))
+                    if (rowAcceptable)
                     {
-                        //Check 2.1 - check it can be converted to decimal
-                        if (!CheckValueCanBeConvertedToFloat(Table.Rows[i][j].ToString()))
-                        {
-                            rowAcceptable = false;
-                            Errors +=  " Column: " + j.ToString() + " value cannot be converted to decimal|";
-                        }
-                        //Action - Convert value ???
+                        acceptedData.ImportRow(Table.Rows[i]);
+                        rowsAcceptedCount++;
 
+                        //Reset row acceptable value
+                        rowAcceptable = true;
+                        rowId = "";
+                        Errors = "";
                     }
-
-                    //Check 5.0 Is the intended data type a date value
-                    if (MetaDataRules.DataType[CurrentColumnName].Equals("Date"))
+                    else
                     {
-                        //Check 2.1 - check it can be converted to date
-                        if (!CheckValueCanBeConvertedToDate(Table.Rows[i][j].ToString()))
-                        {
-                            rowAcceptable = false;
-                            Errors += " Column: " + j.ToString() + " value cannot be converted to date|";
-                        }
-                        else
-                        {
-                            //Action - Convert value to date format
-                            Table.Rows[i][j] = ConvertValueToDateFormat(Table.Rows[i][j].ToString());
-                        }
+                        errorsList.Add("Row: " + rowId, Errors);
+
+                        rowsRejectedCount++;
+
+                        //Reset row acceptable value
+                        rowAcceptable = true;
+                        rowId = "";
+                        Errors = "";
                     }
 
                 }
-
-                if (rowAcceptable)
-                {
-                    acceptedData.ImportRow(Table.Rows[i]);
-                    rowsAcceptedCount++;
-                    //Reset row acceptable value
-                    rowAcceptable = true;
-                }
-                else
-                {
-                    errorsList.Add("Row: " + i.ToString(), Errors);
-                    
-                    rowsRejectedCount++;
-
-                    //Reset row acceptable value
-                    rowAcceptable = true;
-                }
-
-
             }
 
-            watch.Stop();
-
         }
+
+
 
         public DataSet AcceptableData()
         {
@@ -231,6 +253,19 @@ namespace ELTManagement
             int testValue;
 
             if (int.TryParse(Value, out testValue))
+            {
+                ValueCanBeConverted = true;
+            }
+
+            return ValueCanBeConverted;
+        }
+
+        private bool CheckValueCanBeConvertedToBigInt(string value)
+        {
+            bool ValueCanBeConverted = false;
+            Int64 testValue;
+
+            if (Int64.TryParse(value, out testValue))
             {
                 ValueCanBeConverted = true;
             }

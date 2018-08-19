@@ -19,6 +19,9 @@ namespace ELTManagement
         string SQLDestinationCommand;
         SqlConnection conn = new SqlConnection();
 
+        //The application will pull it's SQL Connection to the back end DB from this object
+        AppConfig AppData;
+
         //A list of Text boxes that will hold the Source information that will be used to provide
         //data for the update command 
         List<TextBox> SourceInformation = new List<TextBox>();
@@ -39,15 +42,13 @@ namespace ELTManagement
 
         }
 
-        protected void GridViewPrimaryKey_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+            AppData = new AppConfig();
+            conn.ConnectionString = AppData.ConnectionString;
 
             datasetName = (string)Session["datasetName"];
             ProcessId = (int)Session["ProcessId"];
@@ -67,484 +68,11 @@ namespace ELTManagement
 
         }
 
-        protected void Update_LookBack(object sender, EventArgs e)
-        {
-            SqlCommand comm = new SqlCommand();
-            comm.Connection = conn;
-
-            string useLookBack,lookBackColumn;
-            int lookBackPeriod;
-
-            if (chk_UseLookBack.Checked)
-            {
-                useLookBack = "Yes";
-                lookBackColumn = drpLookBackColumns.SelectedValue.ToString();
-                lookBackPeriod = Convert.ToInt32(txt_lookBackPeriod.Text);
-            }
-            else
-            {
-                useLookBack = "No";
-                lookBackColumn = "N/A";
-                lookBackPeriod = 0;
-            }
-
-            string commandText = "UPDATE [dbo].[Program_DataProperties] SET UseLookBack = @UseLookback, LookBackPeriod = @LookBackPeriod, LookBackColumnName = @LookBackColumnName WHERE ProcessId = @ProcessId";
-            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
-            comm.Parameters.AddWithValue("@UseLookback", useLookBack);
-
-            comm.Parameters.AddWithValue("@LookBackPeriod", lookBackPeriod);
-            comm.Parameters["@LookBackPeriod"].SqlDbType = SqlDbType.Int;
-
-            comm.Parameters.AddWithValue("@LookBackColumnName", lookBackColumn);
-
-            comm.CommandText = commandText;
-
-            try
-            {
-                conn.Open();
-
-                comm.ExecuteNonQuery();
-
-                conn.Close();
-
-                updateInfo = "Record updated successfully";
-            }
-            catch (Exception ex)
-            {
-                updateInfo = "Error" + ex.Message;
-                throw;
-            }
-
-
-            Session["UpdateInfo"] = updateInfo;
-            Response.Redirect("9_UpdateDataPropSelection.aspx");
-        }
-
-        private void SetLookBackDetails()
-        {
-            //populate the drop down with possible look back column names
-            PopulateLookBackDropDown();
-
-            SqlCommand comm = new SqlCommand();
-            comm.Connection = conn;
-            comm.CommandText = "SELECT UseLookBack,LookBackPeriod,LookBackColumnName FROM Program_DataProperties WHERE ProcessId = @ProcessId";
-            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
-
-            string lookBackColumn;
-
-
-            try
-            {
-            conn.Open();
-                SqlDataReader reader = comm.ExecuteReader();
-                while (reader.Read())
-            {
-                if (reader["UseLookBack"].Equals("Yes"))
-                {
-
-                    chk_UseLookBack.Checked = true;
-                    txt_lookBackPeriod.Text = reader["LookBackPeriod"].ToString();
-                    lookBackColumn = reader["LookBackColumnName"].ToString();
-
-                    if (listOfLookBackColumns.Contains(lookBackColumn))
-                    {
-                    drpLookBackColumns.SelectedValue = lookBackColumn;
-                    }
-                    else
-                    {
-                        drpLookBackColumns.SelectedIndex = 0;
-                    }
-
-                }
-            }
-            conn.Close();
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message;
-                throw;
-            }
-
-
-
-        }
-
-        private void PopulateLookBackDropDown()
-        {
-
-            listOfLookBackColumns.Add("");
-            SqlCommand comm = new SqlCommand();
-            comm.Connection = conn;
-            comm.CommandText = "SELECT ColumnName FROM [Program_Metadata] WHERE DataType = 'Date' and ProcessId = @ProcessId";
-            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
-
-            //populate the drop down with possible look back column names
-
-            try
-            {
-                conn.Open();
-                SqlDataReader reader = comm.ExecuteReader();
-                while (reader.Read())
-                {
-                    
-                        listOfLookBackColumns.Add(reader["ColumnName"].ToString());
-                }
-
-                drpLookBackColumns.DataSource = listOfLookBackColumns;
-                drpLookBackColumns.DataBind();
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message;
-                throw;
-            }
-
-
-        }
-
-        #region PrimarKey GridViewCode
-        private void PopulatePKDataGrid()
-        {
-            string commandText = "SELECT [ProcessId], [PrimaryKey] FROM Program_PrimaryKeyData WHERE ProcessId = @ProcessId";
-            SqlCommand comm = new SqlCommand(commandText, conn);
-            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
-            SqlDataAdapter da = new SqlDataAdapter(comm);
-            DataSet ds = new DataSet();
-            conn.Open();
-            da.Fill(ds);
-            conn.Close();
-
-            GridViewPrimaryKey.DataSource = ds;
-            GridViewPrimaryKey.DataBind();
-        }
-
-        protected void GridViewPK_PageIndexChanging(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void GridViewPK_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            int processid = Convert.ToInt32(GridViewMetaData.DataKeys[e.RowIndex].Value.ToString());
-
-            GridViewRow currentRow = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
-            Label lbldeleteid = (Label)currentRow.FindControl("lblID");
-
-            SqlCommand cmd = new SqlCommand("DELETE FROM [dbo].[Program_PrimaryKeyData] WHERE ProcessId = @ProcessId", conn);
-            cmd.Parameters.AddWithValue("@ProcessId", processid);
-            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
-
-            try
-            {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                updateInfo = "Record Successfully Deleted";
-            }
-            catch (Exception ex)
-            {
-
-                updateInfo = "Error " + ex.Message;
-            }
-
-            //Redirect to selection page.
-            Session["UpdateInfo"] = updateInfo;
-            Response.Redirect("9_UpdateDataPropSelection.aspx");
-        }
-
-
-        protected void GridViewPK_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-
-        }
-
-
-
-        #endregion
-
-        #region MetaData GridViewCode
-        private void PopulateMetaDataGrid()
-        {
-            string commandText = "SELECT [ProcessId],[ColumnName],[DataType],[MinLength],[MaxLength],[NullsPermitted],[NullAction],[ReplaceValue],[ColumnOrder] FROM [Project].[dbo].[Program_Metadata] WHERE ProcessId = @ProcessId order by ColumnOrder asc;";
-            SqlCommand comm = new SqlCommand(commandText, conn);
-            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
-            SqlDataAdapter da = new SqlDataAdapter(comm);
-            DataSet ds = new DataSet();
-            conn.Open();
-            da.Fill(ds);
-            conn.Close();
-
-            GridViewMetaData.DataSource = ds;
-            GridViewMetaData.DataBind();
-        }
-
-        protected void GridViewMetaData_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-        protected void GridViewMetaData_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            int processid = Convert.ToInt32(GridViewMetaData.DataKeys[e.RowIndex].Value.ToString());
-            //the primary key for the MetaData Table is a composite key (ProcessID and ColumnName)
-            //This method will pull a list of all original Column Name values
-
-            List<string> OriginalColumNames = GetOriginalColumnNames(processid);
-
-            GridViewRow currentRow = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
-            Label lbldeleteid = (Label)currentRow.FindControl("lblID");
-            
-            SqlCommand cmd = new SqlCommand("DELETE FROM [Project].[dbo].[Program_Metadata] where ProcessId = @ProcessId AND ColumnName = @ColumnName", conn);
-            cmd.Parameters.AddWithValue("@ProcessId", processid);
-            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
-            cmd.Parameters.AddWithValue("@ColumnName", OriginalColumNames[e.RowIndex]);
-
-            //Also need to issue command to delete from the PrimaryKey Table if is a primary Key;
-
-            cmd.CommandText = "DELETE FROM Program_Metadata where ProcessId = @ProcessId AND ColumnName = @ColumnName";
-
-            try
-            {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                updateInfo = "Record Successfully Deleted";
-
-            }
-            catch (Exception ex)
-            {
-
-                updateInfo = "Error " + ex.Message;
-            }
-
-
-            //Redirect to selection page.
-            Session["UpdateInfo"] = updateInfo;
-            Response.Redirect("9_UpdateDataPropSelection.aspx");
-
-        }
-        protected void GridViewMetaData_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-            GridViewMetaData.EditIndex = e.NewEditIndex;
-            PopulateMetaDataGrid();
-
-        }
-        protected void GridViewMetaData_RowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
-
-            int processid = Convert.ToInt32(GridViewMetaData.DataKeys[e.RowIndex].Value.ToString());
-            //the primary key for the MetaData Table is a composite key (ProcessID and ColumnName)
-            //This method will pull a list of all original Column Name values
-
-            List<string> OriginalColumNames = GetOriginalColumnNames(processid);
-
-
-            GridViewRow row = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
-            Label lblID = (Label)row.FindControl("lblID");
-            //TextBox txtname=(TextBox)gr.cell[].control[];  
-            TextBox textColumnName = (TextBox)row.Cells[0].Controls[0];
-            TextBox textDataType = (TextBox)row.Cells[1].Controls[0];
-            TextBox txt_minLength = (TextBox)row.Cells[2].Controls[0];
-            TextBox txt_maxLength = (TextBox)row.Cells[3].Controls[0];
-            TextBox txt_NullsPermitted = (TextBox)row.Cells[4].Controls[0];
-            TextBox txt_NullAction = (TextBox)row.Cells[5].Controls[0];
-            TextBox txt_ReplaceValue = (TextBox)row.Cells[6].Controls[0];
-            TextBox txt_ColumnOrder = (TextBox)row.Cells[7].Controls[0];
-
-            GridViewMetaData.EditIndex = -1;
-            conn.Open();
-            SqlCommand cmd = new SqlCommand("update [dbo].[Program_Metadata] set ColumnName='" + textColumnName.Text + "',DataType='" + textDataType.Text + "',MinLength='" + Convert.ToInt32(txt_minLength.Text) + "',MaxLength='" + Convert.ToInt32(txt_maxLength.Text) + "',NullsPermitted = '" + txt_NullsPermitted.Text + "',NullAction = '" + txt_NullAction.Text + "',ReplaceValue = '" + txt_ReplaceValue.Text + "',ColumnOrder = '" + Convert.ToInt32(txt_ColumnOrder.Text) + "' where processid='" + processid + "' and ColumnName = '" + OriginalColumNames[e.RowIndex] + "'", conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
-            PopulateMetaDataGrid();
-        }
-
-        private List<string> GetOriginalColumnNames(int processid)
-        {
-            string commandText = "select ColumnName from [dbo].[Program_Metadata] where ProcessId = '" + processid + "' order by ColumnOrder asc; ";
-            List<string> columns = new List<string>();
-            SqlCommand comm = new SqlCommand(commandText, conn);
-
-            try
-            {
-                conn.Open();
-                using (SqlDataReader reader = comm.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        columns.Add(reader["ColumnName"].ToString());
-                    }
-                }
-                conn.Close();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            return columns;
-        }
-
-        protected void GridViewMetaData_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            GridViewMetaData.PageIndex = e.NewPageIndex;
-            PopulateMetaDataGrid();
-
-        }
-        protected void GridViewMetaData_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-            GridViewMetaData.EditIndex = -1;
-            PopulateMetaDataGrid();
-        }
-
-        protected void Add_MetaData_Click(object sender, EventArgs e)
-        {
-            SqlCommand cmd = new SqlCommand();
-            string commandText;
-            int count = 0;
-            string errorText = "";
-            //This method will add a new record to the Meta Data Type
-            //If the record is a Primary Key it will also add it to Primary Key Table
-
-            //Step One Add to Meta Data Table
-            string columnName;
-            columnName = txt_ColumnName.Text;
-
-            //Step two check that the column Name doesn't already exist
-
-            commandText = "SELECT COUNT(*) FROM [Project].[dbo].[Program_Metadata] WHERE ProcessId = @ProcessId and ColumnName = @ColumnName";
-            cmd.CommandText = commandText;
-            cmd.Connection = conn;
-            cmd.Parameters.AddWithValue("@ProcessId", ProcessId);
-            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
-            cmd.Parameters.AddWithValue("@ColumnName", columnName);
-            conn.Open();
-            count = Convert.ToInt32(cmd.ExecuteScalar());
-            conn.Close();
-
-            if (count > 0)
-            {
-                //The column already exists issue a warning
-                errorText = "Column Name already exists for this import process";
-                Lbl_AddMetaError.Text = errorText;
-            }
-            else
-            {
-                //else enter the column to the Meta Data Table and Primary Key Table
-                commandText = "INSERT INTO Program_Metadata (ProcessId, ColumnName, DataType, MinLength, MaxLength, NullsPermitted, NullAction, ReplaceValue, ColumnOrder) VALUES(@ProcessId, @ColumnName, @DataType, @MinLength, @MaxLength, @NullsPermitted, @NullAction, @ReplaceValue, @ColumnOrder)";
-                cmd.CommandText = commandText;
-                cmd.Parameters.AddWithValue("@DataType", drp_DataType.SelectedItem.ToString());
-                cmd.Parameters.AddWithValue("@MinLength", Convert.ToInt32(txt_MinLength.Text));
-                cmd.Parameters.AddWithValue("@MaxLength", Convert.ToInt32(txt_MaxLength.Text));
-                cmd.Parameters.AddWithValue("@NullsPermitted", drp_NullPermitted.SelectedItem.ToString());
-                cmd.Parameters.AddWithValue("@NullAction", drp_NullAction.SelectedItem.ToString());
-                cmd.Parameters.AddWithValue("@ReplaceValue", txt_ReplaceValue.Text);
-                cmd.Parameters.AddWithValue("@ColumnOrder", Convert.ToInt32(txt_ColumnOrder.Text));
-
-                try
-                {
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-                    updateInfo = "Record successfully added";
-                }
-                catch (Exception ex)
-                {
-
-                    updateInfo = ex.Message;
-                }
-
-                //step three if the option of Primary Key is selected the column needs to be added to the primary key table
-                if (check_PrimaryKey.Checked)
-                {
-                    UpdatePrimaryKeyRecord(cmd);
-                }
-                
-            }
-
-
-            //Redirect to selection page.
-            Session["UpdateInfo"] = updateInfo;
-            Response.Redirect("9_UpdateDataPropSelection.aspx");
-
-        }
-
-        private void UpdatePrimaryKeyRecord(SqlCommand command)
-        {
-            SqlCommand cmd = command;
-            cmd.Connection = conn;
-            int count;
-            string errorText;
-
-            cmd.CommandText = "SELECT COUNT(*) FROM [Project].[dbo].[Program_PrimaryKeyData] WHERE ProcessId = @ProcessId AND PrimaryKey = @ColumnName";
-            count = 0;
-
-            conn.Open();
-            count = Convert.ToInt32(cmd.ExecuteScalar());
-            conn.Close();
-
-
-            if (count == 0)
-            {
-                //Enter Record to Primary Key Table
-                cmd.CommandText = "  INSERT INTO [Project].[dbo].[Program_PrimaryKeyData] (ProcessId, PrimaryKey) VALUES (@ProcessId, @ColumnName)";
-
-                try
-                {
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-
-
-            }
-            else
-            {
-                //Else issue a warning
-                errorText = "Primary Key already exists for this import process";
-                Lbl_PrimaryKeyError.Text = errorText;
-            }
-        }
-
-        private void SetAddNewMetaDataTable()
-        {
-            //Set the default values for min and max length
-            txt_MinLength.Text = "0";
-            txt_MaxLength.Text = "50";
-
-            //Set the options for the drop down data type
-            List<string> dataTypes = new List<string>();
-            dataTypes.Add("Text");
-            dataTypes.Add("Int");
-            dataTypes.Add("Decimal");
-            dataTypes.Add("Date");
-            drp_DataType.DataSource = dataTypes;
-            drp_DataType.DataBind();
-
-            //Set the options for the drop down Nulls Permitted
-            List<string> options = new List<string>();
-            options.Add("Yes");
-            options.Add("No");
-            drp_NullPermitted.DataSource = options;
-            drp_NullPermitted.DataBind();
-
-            //Set the values for the drop down Null action
-            List<string> actions = new List<string>();
-            actions.Add("Reject");
-            actions.Add("Replace");
-            actions.Add("Accept");
-            drp_NullAction.DataSource = actions;
-            drp_NullAction.DataBind();
-
-        }
-        #endregion
-
+        //This section contains the code required to update the source and destination details
+        #region CodeForSource&DestinationDetailsUpdate
+            //This method controls the update button code
+            //When pressed the code will take each of the entries in the source and destination areas and update
+            //the entries held in the back end DB 
         protected void Update_Click(object sender, EventArgs e)
         {
             DataSetName = SourceInformation[0].Text;
@@ -618,7 +146,8 @@ namespace ELTManagement
             Response.Redirect("9_UpdateDataPropSelection.aspx");
         }
 
-        //This method connnects to the Back End DB and pulls down the data for the import process.
+        //This method connnects to the Back End DB and pulls down the data for the import process
+        //The data that is pulled down is displayed in the text boxes within the Source and Destination areas
         private void LoadDatasetDetails(string datasetName)
         {
             string commandText = "SELECT [ProcessId],[DataSetName],[ImportType],[SourceDBType],[SourceTableName],[SourceDatabase],[SourceServerName],[SourceDataSource],[SourceFileLocation],[SourceUserName],[SourcePassword],[SourceConnectionString],[SourceFileName],[SourceDelimiter],[DestinationType],[DestinationFileLocation],[DestinationConnectionString],[DestinationDatabase],[DestinationServerName],[DestinationUsername],[DestinationPassword],[DestinationTableName],[DestinationDataSource],[UseLookBack],[LookBackPeriod] FROM [dbo].[Program_DataProperties] WHERE DataSetName = '" + datasetName + "'";
@@ -672,7 +201,7 @@ namespace ELTManagement
             Lbl_ImportType.Text = ImportType;
         }
 
-        //This method creates a table of source data that can be edited by the user
+        //This method populates the textboxes in the source data area that can be edited by the user
         private void SetSourceDetails()
         {
 
@@ -885,7 +414,7 @@ namespace ELTManagement
 
         }
 
-        //This method creates a table of destination data that can be edited by the user
+        //This method populates the textboxes in the source data area that can be edited by the user
         private void SetDestinationDetails()
         {
             Label Lbl_DestinationTableName = new Label();
@@ -1057,7 +586,7 @@ namespace ELTManagement
         }
 
 
-
+        //This method updates the destination details with what is held in the textboxes in the destination detail area
         private void DestinationUpdate()
         {
             SqlCommand comm = new SqlCommand(SQLDestinationCommand, conn);
@@ -1087,7 +616,7 @@ namespace ELTManagement
             }
 
         }
-
+        //This method updates the source details with what is held in the textboxes in the source detail area
         private void SourceUpdate()
         {
             SqlCommand comm = new SqlCommand(SQLSourceCommand, conn);
@@ -1122,5 +651,587 @@ namespace ELTManagement
             }
 
         }
+        #endregion
+
+        //This section contains the code required to update the Look back details
+        #region LookBackDetails Code
+        protected void Update_LookBack(object sender, EventArgs e)
+        {
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
+
+            string useLookBack, lookBackColumn;
+            int lookBackPeriod;
+
+            if (chk_UseLookBack.Checked)
+            {
+                useLookBack = "Yes";
+                lookBackColumn = drpLookBackColumns.SelectedValue.ToString();
+                lookBackPeriod = Convert.ToInt32(txt_lookBackPeriod.Text);
+            }
+            else
+            {
+                useLookBack = "No";
+                lookBackColumn = "N/A";
+                lookBackPeriod = 0;
+            }
+
+            string commandText = "UPDATE [dbo].[Program_DataProperties] SET UseLookBack = @UseLookback, LookBackPeriod = @LookBackPeriod, LookBackColumnName = @LookBackColumnName WHERE ProcessId = @ProcessId";
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+            comm.Parameters.AddWithValue("@UseLookback", useLookBack);
+
+            comm.Parameters.AddWithValue("@LookBackPeriod", lookBackPeriod);
+            comm.Parameters["@LookBackPeriod"].SqlDbType = SqlDbType.Int;
+
+            comm.Parameters.AddWithValue("@LookBackColumnName", lookBackColumn);
+
+            comm.CommandText = commandText;
+
+            try
+            {
+                conn.Open();
+
+                comm.ExecuteNonQuery();
+
+                conn.Close();
+
+                updateInfo = "Record updated successfully";
+            }
+            catch (Exception ex)
+            {
+                updateInfo = "Error" + ex.Message;
+                throw;
+            }
+
+
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
+        }
+
+        //This method pull the look back data from the DB and displays it on the web page
+        private void SetLookBackDetails()
+        {
+            //populate the drop down with possible look back column names
+            PopulateLookBackDropDown();
+
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
+            comm.CommandText = "SELECT UseLookBack,LookBackPeriod,LookBackColumnName FROM Program_DataProperties WHERE ProcessId = @ProcessId";
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+
+            string lookBackColumn;
+
+
+            try
+            {
+                conn.Open();
+                SqlDataReader reader = comm.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["UseLookBack"].Equals("Yes"))
+                    {
+
+                        chk_UseLookBack.Checked = true;
+                        txt_lookBackPeriod.Text = reader["LookBackPeriod"].ToString();
+                        lookBackColumn = reader["LookBackColumnName"].ToString();
+
+                        if (listOfLookBackColumns.Contains(lookBackColumn))
+                        {
+                            drpLookBackColumns.SelectedValue = lookBackColumn;
+                        }
+                        else
+                        {
+                            drpLookBackColumns.SelectedIndex = 0;
+                        }
+
+                    }
+                }
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+                throw;
+            }
+
+        }
+
+        //This method pulls all the value date type columns that can be used as look back references
+        private void PopulateLookBackDropDown()
+        {
+
+            listOfLookBackColumns.Add("");
+            SqlCommand comm = new SqlCommand();
+            comm.Connection = conn;
+            comm.CommandText = "SELECT ColumnName FROM [Program_Metadata] WHERE DataType = 'Date' and ProcessId = @ProcessId";
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+
+            //populate the drop down with possible look back column names
+
+            try
+            {
+                conn.Open();
+                SqlDataReader reader = comm.ExecuteReader();
+                while (reader.Read())
+                {
+
+                    listOfLookBackColumns.Add(reader["ColumnName"].ToString());
+                }
+
+                drpLookBackColumns.DataSource = listOfLookBackColumns;
+                drpLookBackColumns.DataBind();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+                throw;
+            }
+
+
+        }
+        #endregion
+
+
+        //This section contains the code required to update the primary key information
+        #region PrimarKey GridViewCode
+        private void PopulatePKDataGrid()
+        {
+            string commandText = "SELECT [ProcessId], [PrimaryKey] FROM Program_PrimaryKeyData WHERE ProcessId = @ProcessId ORDER BY PrimaryKey DESC";
+            SqlCommand comm = new SqlCommand(commandText, conn);
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+            SqlDataAdapter da = new SqlDataAdapter(comm);
+            DataSet ds = new DataSet();
+            conn.Open();
+            da.Fill(ds);
+            conn.Close();
+
+            GridViewPrimaryKey.DataSource = ds;
+            GridViewPrimaryKey.DataBind();
+        }
+
+        protected void GridViewPrimaryKey_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void GridViewPK_PageIndexChanging(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void GridViewPK_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int processid = Convert.ToInt32(GridViewMetaData.DataKeys[e.RowIndex].Value.ToString());
+
+            GridViewRow currentRow = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
+            Label lbldeleteid = (Label)currentRow.FindControl("lblID");
+
+            //This command pulls a list of primary key values, so the column name can be referenced in the delete command
+            List<string> primarKeys = GetPrimaryKeys(processid);
+            string columnName = primarKeys[e.RowIndex];
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM [dbo].[Program_PrimaryKeyData] WHERE ProcessId = @ProcessId AND PrimaryKey =@ColumnName", conn);
+            cmd.Parameters.AddWithValue("@ProcessId", processid);
+            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@ColumnName", columnName);
+            cmd.Parameters["@ColumnName"].SqlDbType = SqlDbType.NVarChar;
+
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                updateInfo = "Record Successfully Deleted";
+            }
+            catch (Exception ex)
+            {
+
+                updateInfo = "Error " + ex.Message;
+            }
+
+            //Redirect to selection page.
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
+        }
+
+        private List<string> GetPrimaryKeys(int processid)
+        {
+            List<string> primaryKeys = new List<string>();
+
+            string commandText = "SELECT[ProcessId], [PrimaryKey] FROM Program_PrimaryKeyData WHERE ProcessId = @ProcessId ORDER BY PrimaryKey DESC";
+            SqlCommand cmd = new SqlCommand(commandText, conn);
+            cmd.Parameters.AddWithValue("@ProcessId", processid);
+            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
+
+            try
+            {
+                conn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        primaryKeys.Add(reader["PrimaryKey"].ToString());
+                    }
+                }
+
+                conn.Close();
+            }
+            catch (Exception)
+            {
+
+
+                throw;
+            }
+
+            return primaryKeys;
+        }
+
+        protected void GridViewPK_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+
+        }
+
+        //This method executes the code to update the primary key data
+        private void UpdatePrimaryKeyRecord(SqlCommand command)
+        {
+            SqlCommand cmd = command;
+            cmd.Connection = conn;
+            int count;
+            string errorText;
+
+            cmd.CommandText = "SELECT COUNT(*) FROM [Project].[dbo].[Program_PrimaryKeyData] WHERE ProcessId = @ProcessId AND PrimaryKey = @ColumnName";
+            count = 0;
+
+            conn.Open();
+            count = Convert.ToInt32(cmd.ExecuteScalar());
+            conn.Close();
+
+
+            if (count == 0)
+            {
+                //Enter Record to Primary Key Table
+                cmd.CommandText = "  INSERT INTO [Project].[dbo].[Program_PrimaryKeyData] (ProcessId, PrimaryKey) VALUES (@ProcessId, @ColumnName)";
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+
+            }
+            else
+            {
+                //Else issue a warning
+                errorText = "Primary Key already exists for this import process";
+                Lbl_PrimaryKeyError.Text = errorText;
+            }
+        }
+
+        #endregion
+
+        //This section contains the code required to update the metadata information
+        #region MetaData GridViewCode
+
+        //This method connects to the back end DB and pulls down the meta data held on this process
+        private void PopulateMetaDataGrid()
+        {
+            string commandText = "SELECT [ProcessId],[ColumnName],[DataType],[MinLength],[MaxLength],[NullsPermitted],[NullAction],[ReplaceValue],[ColumnOrder] FROM [Project].[dbo].[Program_Metadata] WHERE ProcessId = @ProcessId order by ColumnOrder asc;";
+            SqlCommand comm = new SqlCommand(commandText, conn);
+            comm.Parameters.AddWithValue("@ProcessId", ProcessId);
+            SqlDataAdapter da = new SqlDataAdapter(comm);
+            DataSet ds = new DataSet();
+            conn.Open();
+            da.Fill(ds);
+            conn.Close();
+
+            GridViewMetaData.DataSource = ds;
+            GridViewMetaData.DataBind();
+        }
+
+        protected void GridViewMetaData_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //This code controls the delete option in the Metadata gridview table
+        protected void GridViewMetaData_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int processid = Convert.ToInt32(GridViewMetaData.DataKeys[e.RowIndex].Value.ToString());
+            //The primary key for the MetaData Table is a composite key (ProcessID and ColumnName)
+            //This method will pull a list of all original Column Name values
+
+            List<string> OriginalColumNames = GetOriginalColumnNames(processid);
+
+            GridViewRow currentRow = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
+            Label lbldeleteid = (Label)currentRow.FindControl("lblID");
+            
+            SqlCommand cmd = new SqlCommand("DELETE FROM [Project].[dbo].[Program_Metadata] where ProcessId = @ProcessId AND ColumnName = @ColumnName", conn);
+            cmd.Parameters.AddWithValue("@ProcessId", processid);
+            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@ColumnName", OriginalColumNames[e.RowIndex]);
+
+            //Also need to issue command to delete from the PrimaryKey Table if is a primary Key;
+            cmd.CommandText = "DELETE FROM Program_Metadata where ProcessId = @ProcessId AND ColumnName = @ColumnName";
+
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                updateInfo = "Record Successfully Deleted";
+
+            }
+            catch (Exception ex)
+            {
+
+                updateInfo = "Error " + ex.Message;
+            }
+
+
+            //Redirect to selection page.
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
+
+        }
+        protected void GridViewMetaData_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GridViewMetaData.EditIndex = e.NewEditIndex;
+            PopulateMetaDataGrid();
+
+        }
+
+        protected void GridViewMetaData_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+
+            int processid = Convert.ToInt32(GridViewMetaData.DataKeys[e.RowIndex].Value.ToString());
+            //the primary key for the MetaData Table is a composite key (ProcessID and ColumnName)
+            //This method will pull a list of all original Column Name values
+            List<string> OriginalColumNames = GetOriginalColumnNames(processid);
+
+
+            GridViewRow row = (GridViewRow)GridViewMetaData.Rows[e.RowIndex];
+            Label lblID = (Label)row.FindControl("lblID");
+            //TextBox txtname=(TextBox)gr.cell[].control[];  
+            TextBox textColumnName = (TextBox)row.Cells[0].Controls[0];
+            TextBox textDataType = (TextBox)row.Cells[1].Controls[0];
+            TextBox txt_minLength = (TextBox)row.Cells[2].Controls[0];
+            TextBox txt_maxLength = (TextBox)row.Cells[3].Controls[0];
+            TextBox txt_NullsPermitted = (TextBox)row.Cells[4].Controls[0];
+            TextBox txt_NullAction = (TextBox)row.Cells[5].Controls[0];
+            TextBox txt_ReplaceValue = (TextBox)row.Cells[6].Controls[0];
+            TextBox txt_ColumnOrder = (TextBox)row.Cells[7].Controls[0];
+
+            GridViewMetaData.EditIndex = -1;
+
+            //create variables to hold the values to be updated
+            string columName = textColumnName.Text;
+            string dataType = textDataType.Text;
+            int minLength =  Convert.ToInt32(txt_minLength.Text);
+            int maxLength = Convert.ToInt32(txt_maxLength.Text);
+            string nullPermitted = txt_NullsPermitted.Text;
+            string nullaction = txt_NullAction.Text;
+            string replaceValue = txt_ReplaceValue.Text;
+            int columnOrder = Convert.ToInt32(txt_ColumnOrder.Text);
+            string thisColumnname = OriginalColumNames[e.RowIndex];
+
+            //created and SQL Cmd to perform the update
+            SqlCommand cmd = new SqlCommand("update [dbo].[Program_Metadata] set ColumnName=@ColumnName,DataType=@DataType,MinLength=@MinLength,MaxLength=@MaxLength,NullsPermitted=@NullPermitted,NullAction=@NullAction,ReplaceValue=@ReplaceValue,ColumnOrder=@ColumnOrder WHERE processid=@ProcessId and ColumnName=@ThisColumn", conn);
+
+            //Add parameters to the SQL Command
+            cmd.Parameters.AddWithValue("@ColumnName", columName);
+            cmd.Parameters["@ColumnName"].SqlDbType = SqlDbType.NVarChar;
+            cmd.Parameters.AddWithValue("@DataType", dataType);
+            cmd.Parameters["@DataType"].SqlDbType = SqlDbType.NVarChar;
+            cmd.Parameters.AddWithValue("@MinLength", minLength);
+            cmd.Parameters["@MinLength"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@MaxLength", maxLength);
+            cmd.Parameters["@MaxLength"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@NullPermitted", nullPermitted);
+            cmd.Parameters["@NullPermitted"].SqlDbType = SqlDbType.NVarChar;
+            cmd.Parameters.AddWithValue("@NullAction", nullaction);
+            cmd.Parameters["@NullAction"].SqlDbType = SqlDbType.NVarChar;
+            cmd.Parameters.AddWithValue("@ReplaceValue", replaceValue);
+            cmd.Parameters["@ReplaceValue"].SqlDbType = SqlDbType.NVarChar;
+            cmd.Parameters.AddWithValue("@ColumnOrder", columnOrder);
+            cmd.Parameters["@ColumnOrder"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@ProcessId", processid);
+            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@ThisColumn", thisColumnname);
+            cmd.Parameters["@ThisColumn"].SqlDbType = SqlDbType.NVarChar;
+
+            try
+            {
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            PopulateMetaDataGrid();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+        //To update the column name to a new value the existing value must be known
+        //This method pulls a list of the original names from the DB, this list will
+        //be referenced when updated the column metadata details
+        private List<string> GetOriginalColumnNames(int processid)
+        {
+            string commandText = "select ColumnName from [dbo].[Program_Metadata] where ProcessId =@ProcessId order by ColumnOrder asc; ";
+            List<string> columns = new List<string>();
+            SqlCommand cmd = new SqlCommand(commandText, conn);
+            cmd.Parameters.AddWithValue("@ProcessId", ProcessId);
+            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
+
+            try
+            {
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        columns.Add(reader["ColumnName"].ToString());
+                    }
+                }
+                conn.Close();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return columns;
+        }
+
+        protected void GridViewMetaData_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GridViewMetaData.PageIndex = e.NewPageIndex;
+            PopulateMetaDataGrid();
+
+        }
+        protected void GridViewMetaData_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            GridViewMetaData.EditIndex = -1;
+            PopulateMetaDataGrid();
+        }
+
+        //This methods add the new metadata entry to the back end DB
+        protected void Add_MetaData_Click(object sender, EventArgs e)
+        {
+            SqlCommand cmd = new SqlCommand();
+            string commandText;
+            int count = 0;
+            string errorText = "";
+            //This method will add a new record to the Meta Data Type
+            //If the record is a Primary Key it will also add it to Primary Key Table
+
+            //Step One Add to Meta Data Table
+            string columnName;
+            columnName = txt_ColumnName.Text;
+
+            //Step two check that the column Name doesn't already exist
+
+            commandText = "SELECT COUNT(*) FROM [Project].[dbo].[Program_Metadata] WHERE ProcessId = @ProcessId and ColumnName = @ColumnName";
+            cmd.CommandText = commandText;
+            cmd.Connection = conn;
+            cmd.Parameters.AddWithValue("@ProcessId", ProcessId);
+            cmd.Parameters["@ProcessId"].SqlDbType = SqlDbType.Int;
+            cmd.Parameters.AddWithValue("@ColumnName", columnName);
+            conn.Open();
+            count = Convert.ToInt32(cmd.ExecuteScalar());
+            conn.Close();
+
+            if (count > 0)
+            {
+                //The column already exists issue a warning
+                errorText = "Column Name already exists for this import process";
+                Lbl_AddMetaError.Text = errorText;
+            }
+            else
+            {
+                //else enter the column to the Meta Data Table and Primary Key Table
+                commandText = "INSERT INTO Program_Metadata (ProcessId, ColumnName, DataType, MinLength, MaxLength, NullsPermitted, NullAction, ReplaceValue, ColumnOrder) VALUES(@ProcessId, @ColumnName, @DataType, @MinLength, @MaxLength, @NullsPermitted, @NullAction, @ReplaceValue, @ColumnOrder)";
+                cmd.CommandText = commandText;
+                cmd.Parameters.AddWithValue("@DataType", drp_DataType.SelectedItem.ToString());
+                cmd.Parameters.AddWithValue("@MinLength", Convert.ToInt32(txt_MinLength.Text));
+                cmd.Parameters.AddWithValue("@MaxLength", Convert.ToInt32(txt_MaxLength.Text));
+                cmd.Parameters.AddWithValue("@NullsPermitted", drp_NullPermitted.SelectedItem.ToString());
+                cmd.Parameters.AddWithValue("@NullAction", drp_NullAction.SelectedItem.ToString());
+                cmd.Parameters.AddWithValue("@ReplaceValue", txt_ReplaceValue.Text);
+                cmd.Parameters.AddWithValue("@ColumnOrder", Convert.ToInt32(txt_ColumnOrder.Text));
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                    updateInfo = "Record successfully added";
+                }
+                catch (Exception ex)
+                {
+
+                    updateInfo = ex.Message;
+                }
+
+                //step three if the option of Primary Key is selected the column needs to be added to the primary key table
+                if (check_PrimaryKey.Checked)
+                {
+                    UpdatePrimaryKeyRecord(cmd);
+                }
+                
+            }
+
+            //Redirect to selection page.
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("9_UpdateDataPropSelection.aspx");
+        }
+
+        //This method creates and lays out the controls for adding new metadata records
+        private void SetAddNewMetaDataTable()
+        {
+            //Set the default values for min and max length
+            txt_MinLength.Text = "0";
+            txt_MaxLength.Text = "50";
+
+            //Set the options for the drop down data type
+            List<string> dataTypes = new List<string>();
+            dataTypes.Add("Text");
+            dataTypes.Add("Int");
+            dataTypes.Add("Decimal");
+            dataTypes.Add("Date");
+            drp_DataType.DataSource = dataTypes;
+            drp_DataType.DataBind();
+
+            //Set the options for the drop down Nulls Permitted
+            List<string> options = new List<string>();
+            options.Add("Yes");
+            options.Add("No");
+            drp_NullPermitted.DataSource = options;
+            drp_NullPermitted.DataBind();
+
+            //Set the values for the drop down Null action
+            List<string> actions = new List<string>();
+            actions.Add("Reject");
+            actions.Add("Replace");
+            actions.Add("Accept");
+            drp_NullAction.DataSource = actions;
+            drp_NullAction.DataBind();
+
+        }
+        #endregion
+
+
     }
 }

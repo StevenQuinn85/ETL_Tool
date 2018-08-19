@@ -38,6 +38,7 @@ namespace ELTManagement
             string logNotFoundError = "<h2> 404 Error - Page Not Found </h2>";
 
             LogContents.Text = logNotFoundError;
+            
         }
 
         private void PopulateLogContent()

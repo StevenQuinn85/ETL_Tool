@@ -77,7 +77,6 @@ namespace ELTManagement
             tableName = TableDropDownList.SelectedValue.ToString();
         }
 
-        //Pull the table names from the selected database and provide users with a selection
         private List<string> GetTableNames(string connectionDetails)
         {
             List<string> TableNames = new List<string>();
@@ -106,7 +105,7 @@ namespace ELTManagement
 
             return TableNames;
         }
-        //This method tests the connection details provided to ensure they are valid
+
         private bool TestAccessConnection(string connectionDetails)
         {
             bool success = false;

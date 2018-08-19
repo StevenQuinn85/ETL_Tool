@@ -14,6 +14,11 @@ namespace ELTManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
+
+            if (!IsPostBack)
+            {
+                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+            }
         }
 
         protected void btn_Back_Click(object sender, EventArgs e)

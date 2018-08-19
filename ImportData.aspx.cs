@@ -31,6 +31,7 @@ namespace ELTManagement
             if (!IsPostBack)
             {
                 InputConversionNames();
+                drp_Datasets.Width = 175;
 
             }
             
@@ -89,12 +90,9 @@ namespace ELTManagement
 
         protected void btn_Execute_Click(object sender, EventArgs e)
         {
-            //increase the timeout for longer running imports.
-
-            Server.ScriptTimeout = 720;  
+ 
             datasetName = drp_Datasets.SelectedValue.ToString();
             processId = QueryProcessID(datasetName);
-            btn_Execute.Visible = false;
 
             //Call Commands from Program file to perform Data Import
             Code.PerformDataImport(processId);
@@ -104,5 +102,6 @@ namespace ELTManagement
             Session["Results"] = StatsAboutImport;
             Response.Redirect("ImportResults.aspx");
         }
+
     }
 }

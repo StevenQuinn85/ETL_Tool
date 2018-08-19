@@ -41,22 +41,23 @@
                     <h2>Edit Users</h2>
                 </div>
                 <div id="PageContentCenter">
-                                <div id="EditUsers">
+                    <div id="EditUsers">
 
-            <asp:GridView ID="GridViewEditUser" runat="server" AutoGenerateColumns="false" DataKeyNames="Username" OnSelectedIndexChanged="GridViewEditUser_SelectedIndexChanged" OnRowEditing="GridViewEditUser_RowEditing" OnRowDeleting="GridViewEditUser_RowDeleting">
-                <Columns>
-                    <asp:BoundField DataField="Username" HeaderText="Username" />
-                    <asp:BoundField DataField="Password" HeaderText="Password"/>
-                    <asp:BoundField DataField="Role" HeaderText="Role" />
-                    <asp:CommandField ShowEditButton="true" />
-                    <asp:CommandField ShowDeleteButton="true" />
-                </Columns>
-            </asp:GridView>
-                                </div>
+                        <asp:GridView ID="GridViewEditUser" runat="server" AutoGenerateColumns="false" DataKeyNames="Username" OnSelectedIndexChanged="GridViewEditUser_SelectedIndexChanged" OnRowEditing="GridViewEditUser_RowEditing" OnRowDeleting="GridViewEditUser_RowDeleting" OnRowUpdating="GridViewEditUser_RowUpdating" OnRowCancelingEdit="GridViewEditUser_RowCancelingEdit">
+                            <Columns>
+                                <asp:BoundField DataField="Username" HeaderText="Username" />
+                                <asp:BoundField DataField="Password" HeaderText="Password" />
+                                <asp:BoundField DataField="Role" HeaderText="Role" />
+                                <asp:CommandField ShowEditButton="true" />
+                                <asp:CommandField ShowDeleteButton="true" />
+                            </Columns>
+                        </asp:GridView>
+                    </div>
                 </div>
 
             </div>
             <!-- closing wrapper-->
+            <div id="footer">ETL Management 2018 | LYIT | <a href="AdminLogin.aspx">Admin Login</a></div>
         </div>
     </form>
 </body>

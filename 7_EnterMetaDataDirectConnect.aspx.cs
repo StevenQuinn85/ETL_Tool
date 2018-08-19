@@ -18,7 +18,6 @@ namespace ELTManagement
 
         int NumberOfColumns;
 
-        //Create controls to hold the user's entries
         List<TextBox> lst_ColumnNames = new List<TextBox>();
         List<TextBox> lst_ColumnOrder = new List<TextBox>();
         List<DropDownList> lst_DataType = new List<DropDownList>();
@@ -44,9 +43,13 @@ namespace ELTManagement
         {
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
 
+            if (!IsPostBack)
+            {
+                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+            }
+
             List<string> Columns = new List<string>();
 
-            //based on the selections made so far pull the column names from the source table
             if (DataProperties["Source Database Type"].Equals("SQL Server"))
             {
                 Columns = GetColumnNames_SQL();
@@ -60,12 +63,13 @@ namespace ELTManagement
                 Columns = GetColumnNames_Access();
             }
 
-            //get a count of columns in the dataset
+
             NumberOfColumns = Columns.Count();
 
-            //Create and format the individual headers that will be added to the web form
+
             Label lbl_Header = new Label();
             lbl_Header.Style.Add("margin-right", "10px");
+            lbl_Header.Style.Add("margin-bottom", "5px");
             lbl_Header.Style.Add("font-weight", "bold");
             lbl_Header.Text = "Order";
             MetaDataPanel.Controls.Add(lbl_Header);
@@ -119,18 +123,15 @@ namespace ELTManagement
             MetaDataPanel.Controls.Add(lbl_Header8);
 
             MetaDataPanel.Controls.Add(new LiteralControl("</br>"));
+            MetaDataPanel.Controls.Add(new LiteralControl("</br>"));
 
-
-            int count;
-            //For each column in the source dataset add a row of controls to contain the metadata info
-            //each control will be added to a list so the control's contents can be extracted at the final stage
             for (int i = 0; i < NumberOfColumns; i++)
             {
-                count = i;
+                //count = i;
 
                 TextBox txt_columnName = new TextBox();
                 txt_columnName.Width = 100;
-                txt_columnName.Text = Columns[count];
+                txt_columnName.Text = Columns[i];
                 txt_columnName.Style.Add("margin-right", "45px");
                 lst_ColumnNames.Add(txt_columnName);
 
@@ -138,7 +139,7 @@ namespace ELTManagement
                 lst_ColumnOrder.Add(txt_columnOrder);
                 txt_columnOrder.Width = 25;
                 txt_columnOrder.Style.Add("margin-right", "25px");
-                txt_columnOrder.Text = count.ToString();
+                txt_columnOrder.Text = i.ToString();
 
                 TextBox txt_minLength = new TextBox();
                 lst_MinLength.Add(txt_minLength);
@@ -192,7 +193,7 @@ namespace ELTManagement
                 NullsAction.Style.Add("margin-right", "35px");
 
 
-                //add each control to the web form
+
                 MetaDataPanel.Controls.Add(txt_columnOrder);
 
                 MetaDataPanel.Controls.Add(txt_columnName);
@@ -290,7 +291,7 @@ namespace ELTManagement
 
             
         }
-        //Method to get the column names from the source database
+
         private List<string> GetColumnNames_Access()
         {
             List<string> ColumnNames = new List<string>();
@@ -322,7 +323,6 @@ namespace ELTManagement
             return ColumnNames;
         }
 
-        //Method to get the column names from the source database
         private List<string> GetColumnNames_Oracle()
         {
             List<string> ColumnNames = new List<string>();
@@ -360,7 +360,6 @@ namespace ELTManagement
             return ColumnNames;
         }
 
-        //Method to get the column names from the source database
         private List<string> GetColumnNames_SQL()
         {
             List<string> ColumnNames = new List<string>();

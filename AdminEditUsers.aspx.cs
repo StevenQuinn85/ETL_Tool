@@ -15,6 +15,8 @@ namespace ELTManagement
         AppConfig AppData;
         //Create an SQL Connection
         SqlConnection conn;
+        //Create a string value to hold the status of any updates
+        string updateInfo;
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -56,11 +58,14 @@ namespace ELTManagement
 
         }
 
+        //Method to control the editing for data 
         protected void GridViewEditUser_RowEditing(object sender, GridViewEditEventArgs e)
         {
-
+            GridViewEditUser.EditIndex = e.NewEditIndex;
+            PopulateUserDetails();
         }
 
+        //Method to provide delete capabilites for the edit user gridview
         protected void GridViewEditUser_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             GridViewRow currentRow = (GridViewRow)GridViewEditUser.Rows[e.RowIndex];
@@ -79,15 +84,72 @@ namespace ELTManagement
             conn.Open();
             comm.ExecuteNonQuery();
             conn.Close();
-            PopulateUserDetails();
+            updateInfo = "User Deleted Successfully";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                updateInfo = ex.Message;
                 throw;
             }
 
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("AdminOptions.aspx");
 
+        }
+
+        //Method to provide Edit capabilites for the edit user gridview
+        protected void GridViewEditUser_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            string originalUsername = GridViewEditUser.DataKeys[e.RowIndex].Value.ToString();
+            //variable to hold any new values entered by the admin
+            TextBox newUserName, newPassword, newRole;
+            GridViewRow row = (GridViewRow)GridViewEditUser.Rows[e.RowIndex];
+
+            newUserName = (TextBox)row.Cells[0].Controls[0];
+            newPassword = (TextBox)row.Cells[1].Controls[0];
+            newRole = (TextBox)row.Cells[2].Controls[0];
+
+            //Create SQL commnad to update the values for that entry
+            string commandText = "UPDATE [Project].[dbo].[AdminTable] SET Username = @Username, Password = @Password, Role = @Role WHERE Username = @OriginalUsername";
+            SqlCommand comm = new SqlCommand();
+            comm.CommandText = commandText;
+            comm.Connection = conn;
+
+            //Add Parameters
+            comm.Parameters.AddWithValue("@OriginalUsername", originalUsername );
+            comm.Parameters["@OriginalUsername"].SqlDbType = SqlDbType.NVarChar;
+
+            comm.Parameters.AddWithValue("@Username", newUserName.Text);
+            comm.Parameters["@Username"].SqlDbType = SqlDbType.NVarChar;
+
+            comm.Parameters.AddWithValue("@Password", newPassword.Text);
+            comm.Parameters["@Password"].SqlDbType = SqlDbType.NVarChar;
+
+            comm.Parameters.AddWithValue("@Role", newRole.Text);
+            comm.Parameters["@Role"].SqlDbType = SqlDbType.NVarChar;
+
+            try
+            {
+                conn.Open();
+                comm.ExecuteNonQuery();
+                conn.Close();
+                updateInfo = "User Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                updateInfo = ex.Message;
+                throw;
+            }
+
+            Session["UpdateInfo"] = updateInfo;
+            Response.Redirect("AdminOptions.aspx");
+        }
+
+        //Method to provide cancel edit capabilites for the edit user gridview
+        protected void GridViewEditUser_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            GridViewEditUser.EditIndex = -1;
+            PopulateUserDetails();
         }
     }
 }

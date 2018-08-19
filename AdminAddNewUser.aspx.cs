@@ -20,6 +20,23 @@ namespace ELTManagement
         //Create a string value to hold the outcome of the sql command
         internal string updateInfo;
 
+        //Bool for checking if the username alrady exists
+        bool userIdExists;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            //Set the SQL connection
+            AppData = new AppConfig();
+            conn = new SqlConnection();
+            conn.ConnectionString = AppData.ConnectionString;
+
+            if (!IsPostBack)
+            {
+                //Set the options for the role dropdown list
+                EnterRoleOptions();
+            }
+        }
+
         protected void btn_Execute_Click(object sender, EventArgs e)
         {
             //Run a check to make sure that a username and password was entered
@@ -36,17 +53,22 @@ namespace ELTManagement
 
             if (!string.IsNullOrEmpty(txt_Username.Text))
             {
-                username = txt_Username.Text;
+                username = txt_Username.Text;            
+                
+                //Check that the username is unique to the admin table
+                userIdExists = CheckForExistingID(username);
             }
             else
             {
                 lbl_error.Text = "** Please Enter Username";
             }
 
+
+
             role = drp_role.SelectedItem.ToString();
 
             //Check that the required details are entered and attempt to load entry to database AdminTable
-            if ((!string.IsNullOrEmpty(txt_Password.Text) && (!string.IsNullOrEmpty(txt_Username.Text))))
+            if ((!string.IsNullOrEmpty(txt_Password.Text) && (!string.IsNullOrEmpty(txt_Username.Text)) && !userIdExists))
             {
                 //Step the SQL Command details
                 string commandText = "INSERT INTO [Project].[dbo].[AdminTable] (Username, Password, Role) VALUES (@Username, @Password, @Role)";
@@ -78,19 +100,41 @@ namespace ELTManagement
             Response.Redirect("AdminOptions.aspx");
         }
 
-        protected void Page_Load(object sender, EventArgs e)
+        private bool CheckForExistingID(string username)
         {
-            //Set the SQL connection
-            AppData = new AppConfig();
-            conn = new SqlConnection();
-            conn.ConnectionString = AppData.ConnectionString;
+            bool exists = false;
 
-            if (!IsPostBack)
+            //Step the SQL Command details
+            string commandText = "SELECT COUNT(*) FROM [Project].[dbo].[AdminTable] WHERE Username =@Username";
+            SqlCommand comm = new SqlCommand();
+            comm.CommandText = commandText;
+            comm.Connection = conn;
+            comm.Parameters.AddWithValue("@Username", username);
+            comm.Parameters["@Username"].SqlDbType = System.Data.SqlDbType.NVarChar;
+
+            //Variable to hold the number of usernames returned by command;
+            int count =0;
+            try
             {
-            //Set the options for the role dropdown list
-            EnterRoleOptions();
+                conn.Open();
+                count = Convert.ToInt32(comm.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                lbl_error.Text = ex.Message;
             }
 
+            if (count >0)
+            {
+                exists = true;
+            }
+            else
+            {
+                lbl_error.Text = "User Id already exists";
+            }
+
+            return exists;
         }
 
         private void EnterRoleOptions()

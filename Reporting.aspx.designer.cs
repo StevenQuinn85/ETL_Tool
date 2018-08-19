@@ -10,7 +10,7 @@
 namespace ELTManagement {
     
     
-    public partial class _8_ConfirmPage {
+    public partial class Reporting {
         
         /// <summary>
         /// form1 control.
@@ -22,75 +22,48 @@ namespace ELTManagement {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// SourceDetailsDisplay control.
+        /// ReportTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal SourceDetailsDisplay;
+        protected global::System.Web.UI.WebControls.Literal ReportTable;
         
         /// <summary>
-        /// DataDestinationDetails control.
+        /// drp_ImportProcesses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal DataDestinationDetails;
+        protected global::System.Web.UI.WebControls.DropDownList drp_ImportProcesses;
         
         /// <summary>
-        /// PrimaryKeyDetails control.
+        /// cal_StartDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal PrimaryKeyDetails;
+        protected global::System.Web.UI.WebControls.Calendar cal_StartDate;
         
         /// <summary>
-        /// MetaDataDisplay control.
+        /// cal_EndDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal MetaDataDisplay;
+        protected global::System.Web.UI.WebControls.Calendar cal_EndDate;
         
         /// <summary>
-        /// LookBackDisplay control.
+        /// btn_search control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal LookBackDisplay;
-        
-        /// <summary>
-        /// btn_Back control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_Back;
-        
-        /// <summary>
-        /// btn_Confirm control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_Confirm;
-        
-        /// <summary>
-        /// lbl_complete control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_complete;
+        protected global::System.Web.UI.WebControls.Button btn_search;
     }
 }

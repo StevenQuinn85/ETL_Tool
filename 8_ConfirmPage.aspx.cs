@@ -16,7 +16,6 @@ namespace ELTManagement
 
         SqlConnection conn = new SqlConnection();
 
-        //Connection details for the backend DB will come from a Appconfig object
         AppConfig AppData;
 
         //int NumberOfColumns;
@@ -34,15 +33,18 @@ namespace ELTManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Pull the DB connection details
+            //Set the SQL connection Conn to use the Back End DB
             AppData = new AppConfig();
-
-            //conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
             conn.ConnectionString = AppData.ConnectionString;
+            
 
             DataProperties = (Dictionary<string, string>)Session["DataProperties"];
 
-            //Receive all of the data properties entered by the user
+            if (!IsPostBack)
+            {
+                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+            }
+
             c_Names = (List<string>)(Session["ColumnNames"]);
             c_Order = (List<string>)(Session["ColumnOrder"]);
             c_DataTypes = (List<string>)(Session["DataTypes"]);
@@ -53,7 +55,6 @@ namespace ELTManagement
             c_NullAction = (List<string>)(Session["NullAction"]);
             c_ReplaceValue = (List<string>)(Session["ReplacementValue"]);
 
-            //Display the details entered by the user in different sections
             DisplaySourceDetails();
             DisplayDestinationDetails();
             DisplayMetaData();
@@ -75,7 +76,6 @@ namespace ELTManagement
 
         }
 
-        //Populate the lookback details
         private void DisplayLookBackOption()
         {
             StringBuilder TableText = new StringBuilder();
@@ -110,7 +110,6 @@ namespace ELTManagement
             LookBackDisplay.Text = TableText.ToString();
         }
 
-        //Poplulate the primary key details
         private void DisplayPrimaryKeys()
         {
             StringBuilder TableText = new StringBuilder();
@@ -131,7 +130,6 @@ namespace ELTManagement
             PrimaryKeyDetails.Text = TableText.ToString();
         }
 
-        //Populate the destination details
         private void DisplayDestinationDetails()
         {
             StringBuilder TableText = new StringBuilder();
@@ -199,12 +197,10 @@ namespace ELTManagement
 
             }
 
-
-
             TableText.AppendLine("</table> </br>");
             DataDestinationDetails.Text = TableText.ToString();
         }
-        //Populate the Metadata details
+
         private void DisplayMetaData()
         {
             StringBuilder TableText = new StringBuilder();
@@ -256,7 +252,7 @@ namespace ELTManagement
 
             MetaDataDisplay.Text = TableText.ToString();
         }
-        //Poplulate the source details
+
         private void DisplaySourceDetails()
         {
             StringBuilder TableText = new StringBuilder();
@@ -384,8 +380,23 @@ namespace ELTManagement
             }
         }
 
-        //Once the data properties have been loaded to the Database, the metadata and primary key details need to be inserted
-        //using the same processId. This method returns the processId
+        protected void btn_Back_Click(object sender, EventArgs e)
+        {
+            //If the user wants to go back from the confirm page the web site will return to the 
+            //page where they can enter metadata for the import process
+            if (DataProperties["Import Type"].Equals("Feed File"))
+            {
+                Session["DataProperties"] = DataProperties;
+                Response.Redirect("6_MetaDataSelectionFeedFile.aspx");
+            }
+            else if (DataProperties["Import Type"].Equals("Direct Connect"))
+            {
+                Session["DataProperties"] = DataProperties;
+                Response.Redirect("6_MetaDataSelectionDirectConnect.aspx");
+            }
+
+        }
+
         private string RetrieveProcessId()
         {
             string commandText = "SELECT [ProcessId] FROM [dbo].[Program_DataProperties] WHERE [DataSetName] = '" + DataProperties["Dataset Name"] + "'";
@@ -409,7 +420,6 @@ namespace ELTManagement
 
         }
 
-        //This method loads the data properties entried by the user to the back end DB
         private void LoadDataProperties()
         {
             string commandText = "INSERT INTO [dbo].[Program_DataProperties] ([DataSetName],[ImportType],[SourceDBType],[SourceTableName],[SourceDatabase],[SourceServerName],[SourceDataSource],[SourceFileLocation],[SourceUserName],[SourcePassword],[SourceConnectionString],[SourceFileName],[SourceDelimiter],[DestinationType],[DestinationFileLocation],[DestinationConnectionString],[DestinationDatabase],[DestinationServerName],[DestinationUsername],[DestinationPassword],[DestinationTableName],[DestinationDataSource],[UseLookBack],[LookBackPeriod],[LookBackColumnName]) VALUES (@DataSetName,@ImportType,@SourceDBType,@SourceTableName,@SourceDatabase,@SourceServerName,@SourceDataSource,@SourceFileLocation,@SourceUserName,@SourcePassword,@SourceConnectionString,@SourceFileName,@SourceDelimiter,@DestinationType,@DestinationFileLocation,@DestinationConnectionString,@DestinationDatabase,@DestinationServerName,@DestinationUsername,@DestinationPassword,@DestinationTableName,@DestinationDataSource,@UseLookBack,@LookBackPeriod,@LookbackColumnName)";
@@ -603,7 +613,6 @@ namespace ELTManagement
             }
         }
 
-        //This method loads the metadata information entried by the user to the back end DB
         private void LoadMetaData(string processID)
         {
             string[] stringParametersForCommand = { "@ColumnName", "@DataType", "@NullsPermitted", "@NullAction", "@ReplaceValue" };
@@ -642,7 +651,6 @@ namespace ELTManagement
             }
         }
 
-        //This method loads the primary key details entried by the user to the back end DB
         private void LoadPrimaryKeys(string processID)
         {
             string commandText = "INSERT INTO [dbo].[Program_PrimaryKeyData]([ProcessId],[PrimaryKey]) VALUES( @ProcessId, @PKValue)";

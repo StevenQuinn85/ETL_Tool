@@ -78,6 +78,7 @@
 #menu {
     margin: 0 auto;
     width: 15%;
+    min-height:550px;
     float: left;
     left: 1px;
     position: relative;
@@ -85,7 +86,6 @@
     top: -2px;
     background-image: url('background_tile.jpg');
     padding: 5px 5px 5px 5px;
-
     border-right: grey solid 2px;
     border-bottom: grey solid 2px;
 }
@@ -111,10 +111,12 @@
             width: auto;
         }
 #footer {
+    margin-left:0%;
+    margin-right:0%;
    position:relative;
-   bottom:15px;
-   margin-bottom:auto;
-   width:99%;
+   bottom:0;
+   left:0;
+   width:98%;
    padding-top:10px;
     padding-left: 10px;
     padding-bottom:0px;
@@ -161,7 +163,12 @@
     margin-left: 31%;
     margin-right:20%;
 }
-
+#CenterContentLogin {
+    margin-left:auto;
+    margin-right:auto;
+        min-height: 440px;
+    width:30%;
+}
 #Dropdown {
     margin-left: 5%;
     padding: 5px 5px 5px 5px;
@@ -201,11 +208,7 @@
     margin-left: 10%;
     margin-bottom: 5%;
 }
-#CenterContentLogin {
-    margin-left:auto;
-    margin-right:auto;
-    width:30%;
-}
+
 
 #PageContentCenter {
     margin-left: 30%;
@@ -249,18 +252,21 @@
     margin-right: 10%;
     margin-left: 10%;
     margin-top: 5%;
+    margin-bottom:2%;
 }
 
 #NavButtonsCenter {
     margin-left: 30%;
     margin-right: 30%;
     margin-top: 5%;
+    margin-bottom:2%;
 }
 
 #NavButtons1 {
     float: right;
     margin-right: 10%;
     margin-left: 10%;
+    margin-bottom:2%;
 }
 
 #NavButtonsLeft {
@@ -268,6 +274,7 @@
     margin-left: 12%;
     margin-right: 30%;
     margin-top: 5%;
+    margin-bottom:2%;
 }
 #NavButtonsMeta {
     float:right;
@@ -280,12 +287,13 @@
     float: right;
     margin-right: 10%;
     margin-left: 10%;
+
 }
 
 .left {
-    /*float:left;
+    float:left;
     margin-right: 5%;
-    margin-left: 0%;*/
+    margin-left: 0%;
 }
 
 .center {

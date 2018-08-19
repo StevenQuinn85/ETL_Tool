@@ -20,11 +20,13 @@
             </div>
 
             <div id="banner_lower">
+                <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
             </div>
 
 
             <div id="menu">
-                <h2>Home</h2>
+                <h2>Menu</h2>
+                <a href="Home.aspx">Home</a>
                 <a href="ImportData.aspx">Import Data</a>
                 <a href="Configure.aspx">Configure</a>
                 <a href="Reporting.aspx">Reporting</a>
@@ -32,15 +34,15 @@
             </div>
 
             <!--Center Content is the only div to change-->
-            <div id="CenterContent">
+            <div id="CenterContentReporting">
                 <div id="PageTitle">
                     <h2>Enter MetaData</h2>
                 </div>
                 <div id="PageContentMeta">
-                                    <asp:Panel ID="MetaDataPanel" runat="server">
-                </asp:Panel>
+                    <asp:Panel ID="MetaDataPanel" runat="server">
+                    </asp:Panel>
                 </div>
-                <div id="NavButtons">
+                <div id="NavButtonsMeta">
                     <asp:Button ID="btn_back" runat="server" Text="Back" OnClick="btn_Back_Click" Style="width: 47px; height: 26px;" />
                     &nbsp;
                     <asp:Button ID="btn_Next" runat="server" Text="Next" OnClick="btn_Next_Click" Style="width: 47px; height: 26px;" />
@@ -48,6 +50,7 @@
 
             </div>
             <!-- closing wrapper-->
+            <div id="footer">ETL Management 2018 | LYIT | <a href="AdminLogin.aspx">Admin Login</a></div>
         </div>
     </form>
 </body>

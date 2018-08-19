@@ -18,15 +18,17 @@
             </div>
 
             <div id="banner_lower">
+            <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
             </div>
 
 
                 <div id="menu">
-                    <h2>Home</h2>
+                    <h2>Menu</h2>
+                                    <a href="Home.aspx">Home</a>
                     <a href="ImportData.aspx">ImportData</a>
                     <a href="Configure.aspx">Configure</a>
                     <a href="Reporting.aspx">Reporting</a>
-                    <a href="ErrorLogs.aspx">ErrorLogs</a>
+                    <a href="ErrorLogs.aspx">Error Logs</a>
                 </div>
 
             <!--Center Content is the only div to change-->
@@ -47,6 +49,7 @@
             
             </div>
             <!-- closing wrapper-->
+                            <div id="footer">ETL Management 2018 | LYIT | <a href="AdminLogin.aspx">Admin Login</a></div>
         </div>
     </form>
 </body>

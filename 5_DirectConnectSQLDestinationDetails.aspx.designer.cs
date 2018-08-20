@@ -31,6 +31,15 @@ namespace ELTManagement {
         protected global::System.Web.UI.WebControls.TextBox txt_ServerName;
         
         /// <summary>
+        /// lbl_ServerTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_ServerTip;
+        
+        /// <summary>
         /// txt_DatabaseName control.
         /// </summary>
         /// <remarks>
@@ -38,6 +47,15 @@ namespace ELTManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_DatabaseName;
+        
+        /// <summary>
+        /// lbl_DatabaseTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_DatabaseTip;
         
         /// <summary>
         /// PasswordRequired control.
@@ -58,6 +76,15 @@ namespace ELTManagement {
         protected global::System.Web.UI.WebControls.TextBox txt_username;
         
         /// <summary>
+        /// lbl_UsernameTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_UsernameTip;
+        
+        /// <summary>
         /// txt_password control.
         /// </summary>
         /// <remarks>
@@ -65,6 +92,15 @@ namespace ELTManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_password;
+        
+        /// <summary>
+        /// lbl_PasswordTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_PasswordTip;
         
         /// <summary>
         /// btn_Test control.
@@ -128,6 +164,15 @@ namespace ELTManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList TableDropDownList;
+        
+        /// <summary>
+        /// lbl_TableTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_TableTip;
         
         /// <summary>
         /// btn_back control.

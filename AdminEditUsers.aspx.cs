@@ -151,5 +151,10 @@ namespace ELTManagement
             GridViewEditUser.EditIndex = -1;
             PopulateUserDetails();
         }
+
+        protected void btn_Back_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("AdminOptions.aspx");
+        }
     }
 }

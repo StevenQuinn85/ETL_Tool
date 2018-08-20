@@ -20,7 +20,16 @@ namespace ELTManagement.DataEntryForms
             if (!IsPostBack)
             {
                 ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //Configure the text for the tool tips
+                ConfigureToolTips();
             }
+        }
+
+        private void ConfigureToolTips()
+        {
+            lbl_DelimterTip.ToolTip = "Enter the character that will split the columns in the source file";
+            lbl_FileLocationTip.ToolTip = "Enter the location of the source file (including file name and extention)";
+            lbl_FileNameTip.ToolTip = "Enter the file name (including extention)";
         }
 
         protected void btn_Back_Click(object sender, EventArgs e)

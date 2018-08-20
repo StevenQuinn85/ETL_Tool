@@ -34,7 +34,7 @@
             </div>
 
             <!--Center Content is the only div to change-->
-            <div id="CenterContentReporting">
+            <div id="CenterContent">
                 <div id="PageTitle">
                     <h2>Enter MetaData</h2>
                 </div>

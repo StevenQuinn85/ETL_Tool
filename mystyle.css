@@ -163,12 +163,7 @@
     margin-left: 31%;
     margin-right:20%;
 }
-#CenterContentLogin {
-    margin-left:auto;
-    margin-right:auto;
-        min-height: 440px;
-    width:30%;
-}
+
 #Dropdown {
     margin-left: 5%;
     padding: 5px 5px 5px 5px;
@@ -208,7 +203,11 @@
     margin-left: 10%;
     margin-bottom: 5%;
 }
-
+#CenterContentLogin {
+    margin-left:auto;
+    margin-right:auto;
+    width:30%;
+}
 
 #PageContentCenter {
     margin-left: 30%;
@@ -378,4 +377,9 @@ margin-right:35%;
     width:30%;
     min-height:350px;
         max-height:600px;
+}
+.toolTip {
+    width:20px;
+        background-color: #57A0D3;
+        text-align:center;
 }

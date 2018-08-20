@@ -40,8 +40,17 @@
                     <h2>Enter Location of Sample Feed File</h2>
                 </div>
                 <div id="PageContentMeta">
-                    <asp:Label ID="Label1" runat="server" Text="File Location:  "></asp:Label>
-                    <asp:TextBox ID="txt_sampleFileLocation" runat="server" Width="250px"></asp:TextBox>
+
+                    <table>
+                        <tr>
+                            <td><asp:Label ID="Label1" runat="server" Text="File Location:  "></asp:Label></td>
+                            <td><asp:TextBox ID="txt_sampleFileLocation" runat="server" Width="250px"></asp:TextBox></td>
+                            <td><div id="tip_FileLocation" class="toolTip"><asp:Label ID="lbl_FileLocationTip" runat="server">?</asp:Label></div></td>
+                        </tr>
+                    </table>
+
+                    
+                    
                 </div>
                 <div id="NavButtons">
                     <asp:Label ID="lbl_FeedFileError" runat="server"></asp:Label><br />

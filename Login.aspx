@@ -43,18 +43,21 @@
                             <td>
                                 <label>Password: </label>
                             </td>
-                            <td>
+  
+                           <td>
                                 <asp:TextBox ID="txt_password" runat="server" TextMode="Password"></asp:TextBox></td>
+                       
+                                </tr>
+                                <tr>
+                                    <td>
+                                <asp:Button ID="btn_login" runat="server" Text="Login" OnClick="btn_login_Click" />
+                            </td>
+                            <td><asp:Label ID="lbl_error" runat="server"></asp:Label></td>
                         </tr>
                     </table>
 
-                    <br />
-                    <asp:Label ID="lbl_error" runat="server"></asp:Label>
-                    <br />
                 </div>
-                <div id="NavButtons">
-                    <asp:Button ID="btn_login" runat="server" Text="Login" OnClick="btn_login_Click" />
-                </div>
+
 
             </div>
             <!-- closing wrapper-->

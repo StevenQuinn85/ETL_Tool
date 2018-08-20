@@ -45,7 +45,16 @@ namespace ELTManagement
             if (!IsPostBack)
             {
                 PopulateDateDropDown();
+                //Configure the text for the tool tips
+                ConfigureToolTips();
             }
+        }
+
+        private void ConfigureToolTips()
+        {
+            lbl_LookBackTip.ToolTip = "Check this box if you want to include a look back period when extracting data from the source table";
+            lbl_ColumnsTip.ToolTip = "Select the date column to reference when extracting data from the source table";
+            lbl_PeriodTip.ToolTip = "Select the number of days to look back";
         }
 
         private void PopulateDateDropDown()

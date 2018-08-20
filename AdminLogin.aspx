@@ -18,7 +18,7 @@
                     <h1>ETL Management</h1>
                 </div>
             </div>
-            <div id="LogOutOption"><a href="Home.aspx">Log Out</a></div>
+            <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
             <div id="banner_lower">
             </div>
 
@@ -53,17 +53,20 @@
                             <td>
                                 <asp:TextBox ID="txt_password" runat="server" TextMode="Password"></asp:TextBox></td>
                         </tr>
+                        <tr>
+                            <td>
+                                <asp:Button ID="btn_login" runat="server" Text="Login" OnClick="btn_login_Click" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lbl_error" runat="server"></asp:Label>
+                            </td>
+                        </tr>
                     </table>
-                    <br />
-                    <asp:Label ID="lbl_error" runat="server"></asp:Label>
-                                        <asp:Button ID="btn_login" runat="server" Text="Login" OnClick="btn_login_Click" />
                 </div>
 
 
             </div>
-                            <div id="NavButtons">
 
-                </div>
             <!-- closing wrapper-->
             <div id="footer">ETL Management 2018 | LYIT | <a href="AdminLogin.aspx">Admin Login</a></div>
         </div>

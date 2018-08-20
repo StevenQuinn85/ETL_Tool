@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>ETL Management</title>
-    <link href="../mystyle.css" rel="stylesheet" />
+    <link href="mystyle.css" rel="stylesheet" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -37,9 +37,16 @@
                 <div id="PageTitle"><h2>Enter Dataset Name</h2></div>
 
                 <div id ="PageContent">
-                                    <asp:Label ID="Label1" runat="server" Text="Dataset Name: "></asp:Label>
-                <asp:TextBox ID="txt_DatasetName" runat="server" Width ="250px"></asp:TextBox>
-                <asp:Label ID ="ErrorLabel" runat ="server"></asp:Label>
+
+                    <table>
+                        <tr>
+                            <td><asp:Label ID="Label1" runat="server" Text="Dataset Name: "></asp:Label></td>
+                            <td><asp:TextBox ID="txt_DatasetName" runat="server" Width ="250px"></asp:TextBox></td>
+                            <td><div id="tip_DataSet" class="toolTip"><asp:Label ID="lbl_DataSetTip" runat="server">?</asp:Label></div></td>
+                            <td><asp:Label ID ="ErrorLabel" runat ="server"></asp:Label></td>
+                        </tr>
+                    </table>
+                
                 <br />
 
                 </div>

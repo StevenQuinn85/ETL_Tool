@@ -22,9 +22,22 @@ namespace ELTManagement
 
             if (!IsPostBack)
             {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //Configure the text for the tool tips
+                ConfigureToolTips();
             }
         }
+
+        private void ConfigureToolTips()
+        {
+
+            lbl_DatabaseTip.ToolTip = "Enter the destination database name";
+            lbl_ServerTip.ToolTip = "Enter the datasource or server where the database is hosted";
+            lbl_UsernameTip.ToolTip = "Enter the username required to access the database";
+            lbl_PasswordTip.ToolTip = "Enter the password required to access the database";
+            lbl_TableTip.ToolTip = "Select the destination table";
+        }
+
 
         protected void btn_Test_Click(object sender, EventArgs e)
         {

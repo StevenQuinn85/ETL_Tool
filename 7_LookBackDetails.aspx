@@ -46,6 +46,7 @@
                             </td>
                             <td>
                                 <asp:CheckBox ID="chk_UseLookBack" runat="server" OnCheckedChanged="chk_UseLookBack_CheckedChanged" /></td>
+                            <td><div id="tip_lookback" class="toolTip"><asp:Label ID="lbl_LookBackTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
@@ -54,6 +55,7 @@
                             <td>
                                 <asp:DropDownList ID="drp_LookBackDates" runat="server"></asp:DropDownList>
                             </td>
+                            <td><div id="tip_Columns" class="toolTip"><asp:Label ID="lbl_ColumnsTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
@@ -62,6 +64,7 @@
                             <td>
                                 <asp:TextBox ID="txt_LookBackPeriod" runat="server"></asp:TextBox>
                             </td>
+                            <td><div id="tip_Period" class="toolTip"><asp:Label ID="lbl_PeriodTip" runat="server">?</asp:Label></div></td>
                         </tr>
                     </table>
                 </div>

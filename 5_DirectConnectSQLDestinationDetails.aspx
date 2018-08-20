@@ -45,28 +45,34 @@
                                 <label>Enter Server Name</label></td>
                             <td>
                                 <asp:TextBox ID="txt_ServerName" runat="server" Width="250"></asp:TextBox></td>
+                                                        <td><div id="tip_Server" class="toolTip"><asp:Label ID="lbl_ServerTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
                                 <label>Enter Database Name</label></td>
                             <td>
                                 <asp:TextBox ID="txt_DatabaseName" runat="server" Width="250"></asp:TextBox></td>
+                                                        <td><div id="tip_DatabaseName" class="toolTip"><asp:Label ID="lbl_DatabaseTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
+                            <td><label>Password required</label></td>
                             <td>
                                 <asp:CheckBox ID="PasswordRequired" runat="server" /></td>
+
                         </tr>
                         <tr>
                             <td>
                                 <label>Enter User Name</label></td>
                             <td>
                                 <asp:TextBox ID="txt_username" runat="server" Width="250"></asp:TextBox></td>
+                                                        <td><div id="tip_Username" class="toolTip"><asp:Label ID="lbl_UsernameTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
                                 <label>Enter Password</label></td>
                             <td>
                                 <asp:TextBox ID="txt_password" runat="server" Width="250"></asp:TextBox></td>
+                                                        <td><div id="tip_Password" class="toolTip"><asp:Label ID="lbl_PasswordTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
@@ -88,6 +94,7 @@
                                 <asp:Panel ID="Panel2" runat="server">
                                     <asp:DropDownList ID="TableDropDownList" runat="server" OnSelectedIndexChanged="TableDropDownList_SelectedIndexChanged"></asp:DropDownList></asp:Panel>
                             </td>
+                                                        <td><div id="tip_Tablename" class="toolTip"><asp:Label ID="lbl_TableTip" runat="server">?</asp:Label></div></td>
                         </tr>
                     </table>
                 </div>

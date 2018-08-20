@@ -19,8 +19,14 @@ namespace ELTManagement
 
             if (!IsPostBack)
             {
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //Configure the text for the tool tips
+                ConfigureToolTips();
             }
+        }
+
+        private void ConfigureToolTips()
+        {
+            lbl_FileLocationTip.ToolTip = "Enter the current location of the source file (including filename and extension)";
         }
 
         protected void btn_Next_Click(object sender, EventArgs e)

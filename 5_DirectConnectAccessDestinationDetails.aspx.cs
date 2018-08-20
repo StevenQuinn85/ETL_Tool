@@ -25,7 +25,16 @@ namespace ELTManagement
             if (!IsPostBack)
             {
                 ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //Configure the text for the tool tips
+                ConfigureToolTips();
             }
+        }
+
+        private void ConfigureToolTips()
+        {
+            lbl_FileLocationTip.ToolTip = "Enter the location of the Access Data (including filename and extension)";
+            lbl_PasswordTip.ToolTip = "Enter any required password to access the database";
+            lbl_TableTip.ToolTip = "Select the destination table from database";
         }
 
         protected void btn_Next_Click(object sender, EventArgs e)

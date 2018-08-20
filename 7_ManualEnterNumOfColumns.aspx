@@ -39,8 +39,16 @@
                     <h2>How many columns are in the source ?</h2>
                 </div>
                 <div id="PageContentMeta">
-                    <asp:Label ID="Label2" runat="server" Text="Number of Columns"></asp:Label>
-                    <asp:TextBox ID="txt_numberofcolumns" runat="server"></asp:TextBox>
+                    <table>
+                        <tr>
+                            <td><asp:Label ID="Label2" runat="server" Text="Number of Columns"></asp:Label></td>
+                            <td><asp:TextBox ID="txt_numberofcolumns" runat="server"></asp:TextBox></td>
+                            <td><td><div id="tip_Columns" class="toolTip"><asp:Label ID="lbl_ColumnsTip" runat="server">?</asp:Label></div></td></td>
+                            <td><asp:Label ID="lbl_Error" runat="server"></asp:Label></td>
+                        </tr>
+                    </table>
+                    
+                    
                 </div>
                 <div id="NavButtons">
                     <asp:Button ID="btn_back" runat="server" Text="Back" OnClick="btn_Back_Click" Style="width: 47px; height: 26px;" />

@@ -31,8 +31,15 @@ namespace ELTManagement.DataEntryForms
             if (!IsPostBack)
             {
                 DataProperties = (Dictionary<string, string>)(Session["DataProperties"]);
-                ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //Load the tool tip text
+                ConfigureToolTips();
             }
+        }
+
+        private void ConfigureToolTips()
+        {
+            lbl_DataSetTip.ToolTip = "Enter the name of the new import process";
         }
 
         protected void btn_Confirm_Click(object sender, EventArgs e)

@@ -58,6 +58,8 @@
                     <asp:Label ID="lbl_error" runat="server"></asp:Label>
                 </div>
                 <div id="NavButtons">
+                    <asp:Button ID="btn_back" runat="server" Text="Back" OnClick="btn_Back_Click" Style="width: 47px; height: 26px;" />
+                    &nbsp;
                     <asp:Button ID="btn_Execute" runat="server" Text="Enter" OnClick="btn_Execute_Click" />
                 </div>
 

@@ -100,6 +100,11 @@ namespace ELTManagement
             Response.Redirect("AdminOptions.aspx");
         }
 
+        protected void btn_Back_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("AdminOptions.aspx");
+        }
+
         private bool CheckForExistingID(string username)
         {
             bool exists = false;

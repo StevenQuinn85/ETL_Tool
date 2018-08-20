@@ -40,6 +40,15 @@ namespace ELTManagement {
         protected global::System.Web.UI.WebControls.CheckBox chk_UseLookBack;
         
         /// <summary>
+        /// lbl_LookBackTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_LookBackTip;
+        
+        /// <summary>
         /// lbl_SelectLookBackColumn control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,15 @@ namespace ELTManagement {
         protected global::System.Web.UI.WebControls.DropDownList drp_LookBackDates;
         
         /// <summary>
+        /// lbl_ColumnsTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_ColumnsTip;
+        
+        /// <summary>
         /// lbl_LookBackPeriod control.
         /// </summary>
         /// <remarks>
@@ -74,6 +92,15 @@ namespace ELTManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_LookBackPeriod;
+        
+        /// <summary>
+        /// lbl_PeriodTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_PeriodTip;
         
         /// <summary>
         /// btn_back control.

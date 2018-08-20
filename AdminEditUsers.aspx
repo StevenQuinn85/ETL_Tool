@@ -54,6 +54,9 @@
                         </asp:GridView>
                     </div>
                 </div>
+                                <div id="NavButtons">
+                    <asp:Button ID="btn_back" runat="server" Text="Back" OnClick="btn_Back_Click" Style="width: 47px; height: 26px;" />
+                </div>
 
             </div>
             <!-- closing wrapper-->

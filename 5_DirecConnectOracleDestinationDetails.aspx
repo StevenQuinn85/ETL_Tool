@@ -46,14 +46,17 @@
                             </td>
                             <td>
                                 <asp:TextBox ID="txt_DataSource" runat="server" Width="250"></asp:TextBox></td>
+                            <td><div id="tip_DataSource" class="toolTip"><asp:Label ID="lbl_DataSourceTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
                                 <label>Enter Database</label></td>
                             <td>
                                 <asp:TextBox ID="txt_dbName" runat="server" Width="250"></asp:TextBox></td>
+                            <td><div id="tip_Database" class="toolTip"><asp:Label ID="lbl_DatabaseTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
+                            <td><label>Password required</label></td>
                             <td>
                                 <asp:CheckBox ID="PasswordRequired" runat="server" /></td>
                         </tr>
@@ -62,12 +65,14 @@
                                 <label>Enter User Name</label></td>
                             <td>
                                 <asp:TextBox ID="txt_username" runat="server" Width="250"></asp:TextBox></td>
+                            <td><div id="tip_Username" class="toolTip"><asp:Label ID="lbl_UsernameTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
                                 <label>Enter Password</label></td>
                             <td>
                                 <asp:TextBox ID="txt_password" runat="server" Width="250"></asp:TextBox></td>
+                                                        <td><div id="tip_Password" class="toolTip"><asp:Label ID="lbl_PasswordTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
@@ -90,6 +95,7 @@
                                     <asp:DropDownList ID="TableDropDownList" runat="server" OnSelectedIndexChanged="TableDropDownList_SelectedIndexChanged"></asp:DropDownList>
                                 </asp:Panel>
                             </td>
+                                                        <td><div id="tip_Table" class="toolTip"><asp:Label ID="lbl_TableTip" runat="server">?</asp:Label></div></td>
                         </tr>
                     </table>
                 </div>

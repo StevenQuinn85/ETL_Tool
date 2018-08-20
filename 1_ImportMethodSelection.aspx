@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link href="../mystyle.css" rel="stylesheet" />
+    <link href="mystyle.css" rel="stylesheet" />
     <title>ETL Management</title>
 </head>
 <body>

@@ -24,7 +24,18 @@ namespace ELTManagement.DataEntryForms
             if (!IsPostBack)
             {
                 ViewState["RefUrl"] = Request.UrlReferrer.ToString();
+                //Configure the text for the tool tips
+                ConfigureToolTips();
             }
+        }
+
+        private void ConfigureToolTips()
+        {
+            lbl_DatabaseNameTip.ToolTip = "Enter the source database name";
+            lbl_DataSourceTip.ToolTip = "Enter the datasource or server where the database is hosted";
+            lbl_PasswordTip.ToolTip = "Enter any passwords required to access the database";
+            lbl_UserNameTip.ToolTip = "Enter any username required to access the database";
+            lbl_TableTip.ToolTip = "Select the source table";
         }
 
         protected void btn_Test_Click(object sender, EventArgs e)

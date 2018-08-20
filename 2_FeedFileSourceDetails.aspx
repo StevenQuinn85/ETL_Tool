@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>ETL Management</title>
-    <link href="../mystyle.css" rel="stylesheet" />
+    <link href="mystyle.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -46,18 +46,21 @@
                                 <asp:Label Text="FileLocation" runat="server" /></td>
                             <td>
                                 <asp:TextBox runat="server" ID="txt_FileLocation" Width="250px" /></td>
+                            <td><div id="tip_FileLocation" class="toolTip"><asp:Label ID="lbl_FileLocationTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
                                 <asp:Label Text="File Name" runat="server" /></td>
                             <td>
                                 <asp:TextBox runat="server" ID="txt_FileName" Width="250px" /></td>
+                            <td><div id="tip_FileName" class="toolTip"><asp:Label ID="lbl_FileNameTip" runat="server">?</asp:Label></div></td>
                         </tr>
                         <tr>
                             <td>
                                 <asp:Label Text="DelimiterChar" runat="server" /></td>
                             <td>
-                                <asp:TextBox runat="server" ID="txt_Delimiter" /></td>
+                                <asp:TextBox runat="server" ID="txt_Delimiter" Width="250px" /></td>
+                            <td><div id="tip_Delimiter" class="toolTip"><asp:Label ID="lbl_DelimterTip" runat="server">?</asp:Label></div></td>
                         </tr>
                     </table>
                 </div>

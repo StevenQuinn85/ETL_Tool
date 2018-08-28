@@ -16,15 +16,21 @@ namespace ELTManagement
         int processId;
         string updateInfo = "";
 
+        //Create an appdata object to hold the connection string details
+        ETLComponents.AppConfig appData;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+            //Get connection details for back end DB
+            appData = new ETLComponents.AppConfig();
+            conn.ConnectionString = appData.ConnectionString;
 
 
             if (!Page.IsPostBack)
             {
                 updateInfo = (string)Session["UpdateInfo"];
-                lbl_UpdateInfo.InnerText = updateInfo;
+                //Removing the update statement 2018-08-27
+                //lbl_UpdateInfo.InnerText = updateInfo;
                 //reset the update information
                 updateInfo = "";
                 //Create a list of import process and add to the drop downlist

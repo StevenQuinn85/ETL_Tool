@@ -11,7 +11,7 @@ namespace ELTManagement
     public partial class AdminLogin : System.Web.UI.Page
     {
         //Create an AppConfig object to get the connection string
-        AppConfig AppData;
+        ETLComponents.AppConfig AppData;
         //Create an SQL Connection
         SqlConnection conn;
 
@@ -22,7 +22,7 @@ namespace ELTManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             //Set the SQL connection
-            AppData = new AppConfig();
+            AppData = new ETLComponents.AppConfig();
             conn = new SqlConnection();
                 conn.ConnectionString = AppData.ConnectionString;
 

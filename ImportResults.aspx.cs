@@ -11,13 +11,13 @@ namespace ELTManagement
     {
 
         //Results object to receive the details about the import process
-        Results Stats = new Results();
+        ETLComponents.Results Stats = new ETLComponents.Results();
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                Stats = (Results)Session["Results"];
+                Stats = (ETLComponents.Results)Session["Results"];
                 UpdateStatsTable();
             }
 

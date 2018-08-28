@@ -13,10 +13,13 @@ namespace ELTManagement
     public partial class ImportData : System.Web.UI.Page
     {
         //The Import Process will use the code in the Program file to execute the ETL process.
-        Program Code;
+        ETLComponents.Program Code;
 
         //Results Object to be passed to the results page
-        Results StatsAboutImport = new Results();
+        ETLComponents.Results StatsAboutImport = new ETLComponents.Results();
+
+        //Create an appdata object to retrieve the connection string of back end db
+        ETLComponents.AppConfig appdata;
 
         SqlConnection conn = new SqlConnection();
 
@@ -25,8 +28,11 @@ namespace ELTManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
-            Code = new Program(conn);
+            //Establish the connection strings
+            appdata = new ETLComponents.AppConfig();
+            //Connect to back end Database
+            conn.ConnectionString = appdata.ConnectionString;
+            Code = new ETLComponents.Program(conn);
 
             if (!IsPostBack)
             {

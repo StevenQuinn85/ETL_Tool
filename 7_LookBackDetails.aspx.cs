@@ -21,6 +21,7 @@ namespace ELTManagement
         List<string> c_ReplaceValue = new List<string>();
         List<string> lst_PrimaryKeys = new List<string>();
 
+        //Variables to hold the look back details
         string lookBackColumn, useLookBack, lookBackPeriod;
 
         //If the user needs to move to the previous page this variable will collect
@@ -57,6 +58,8 @@ namespace ELTManagement
             lbl_PeriodTip.ToolTip = "Select the number of days to look back";
         }
 
+        //This method will iterate through all of the columns marked with the data type Date and 
+        //add them to the drop down list
         private void PopulateDateDropDown()
         {
             List<string> LookBackColumns = new List<string>();

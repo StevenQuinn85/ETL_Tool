@@ -21,7 +21,6 @@
             </div>
 
             <div id="banner_lower">
-                <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
             </div>
 
             <!--Center Content is the only div to change-->
@@ -37,7 +36,7 @@
                                 <label>Username: </label>
                             </td>
                             <td>
-                                <asp:TextBox ID="txt_Username" runat="server"></asp:TextBox></td>
+                                <asp:TextBox ID="txt_Username" runat="server" Width="200px"></asp:TextBox></td>
                         </tr>
                         <tr>
                             <td>
@@ -45,7 +44,7 @@
                             </td>
   
                            <td>
-                                <asp:TextBox ID="txt_password" runat="server" TextMode="Password"></asp:TextBox></td>
+                                <asp:TextBox ID="txt_password" runat="server" TextMode="Password" Width="200px"></asp:TextBox></td>
                        
                                 </tr>
                                 <tr>

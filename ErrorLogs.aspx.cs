@@ -12,12 +12,17 @@ namespace ELTManagement
 {
     public partial class ErrorLogs : System.Web.UI.Page
     {
+        //Create appdata object to retrieve the back end DB connection string
+        ETLComponents.AppConfig appData;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 PopulateErrorLogsTable();
             }
+
+
         }
 
         private void PopulateErrorLogsTable()
@@ -26,7 +31,12 @@ namespace ELTManagement
             SqlConnection conn = new SqlConnection();
             SqlCommand comm = new SqlCommand();
             string commandText = "  SELECT ProcessName, StartTime, LogName FROM [Project].[dbo].[JobRunHistory] WHERE LogName IS NOT NULL ORDER BY StartTime DESC";
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+
+            //retrieve back end DB connection details
+            appData = new ETLComponents.AppConfig();
+
+            //Connect to BackEnd DB
+            conn.ConnectionString = appData.ConnectionString;
 
             string processName, startTime, logLocation;
 

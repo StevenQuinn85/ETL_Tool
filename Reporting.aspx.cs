@@ -17,10 +17,13 @@ namespace ELTManagement
         private DateTime EndDate = new DateTime();
         private TimeSpan oneWeek = new TimeSpan(7,0,0,0);
 
-        //private SqlConnection conn = new SqlConnection();
+        //Create appdata object to retrieve the back end DB connection string
+        ETLComponents.AppConfig appData;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            appData = new ETLComponents.AppConfig();
+
             if (!Page.IsPostBack)
             {
                 InputConversionNames();
@@ -38,7 +41,9 @@ namespace ELTManagement
         private void InputConversionNames()
         {
             SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+
+            //Connect to BackEnd DB
+            conn.ConnectionString = appData.ConnectionString;
             List<string> listOfConversions = new List<string>();
             string commandText = "SELECT DISTINCT [DataSetName] FROM [Project].[dbo].[Program_DataProperties]";
 
@@ -69,7 +74,9 @@ namespace ELTManagement
         protected void btn_search_Click(object sender, EventArgs e)
         {
             SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+
+            //Connect to BackEnd DB
+            conn.ConnectionString = appData.ConnectionString;
             SqlCommand comm = new SqlCommand();
 
             importName = drp_ImportProcesses.SelectedValue.ToString();

@@ -9,7 +9,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        
+
         <!--wrapper div-->
         <div id="wrapper">
 
@@ -21,7 +21,7 @@
             </div>
 
             <div id="banner_lower">
-            <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
+                <div id="LogOutOption"><a href="Login.aspx">Log Out</a></div>
             </div>
 
 
@@ -38,17 +38,18 @@
             <div id="CenterContent">
                 <div id="HomePageRight">
                     <h3>Recent Imports</h3>
-                    <asp:Literal ID ="lit_RecentImportsTable" runat="server"></asp:Literal>
+                    <asp:Literal ID="lit_RecentImportsTable" runat="server"></asp:Literal>
                 </div>
                 <div id="HomePageLeft">
                     <h3>ETL Management System</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mauris sit amet purus iaculis interdum. Integer finibus dignissim euismod. Duis id lectus mi. Suspendisse sed libero sit amet libero ullamcorper vestibulum nec sed nulla. Sed augue elit, varius at nisl id, faucibus dapibus metus. Donec sed leo aliquet, porttitor elit in, congue ante. Vestibulum vel lobortis eros. Suspendisse potenti.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mauris sit amet purus iaculis interdum. Integer finibus dignissim euismod. Duis id lectus mi. Suspendisse sed libero sit amet libero ullamcorper vestibulum nec sed nulla. Sed augue elit, varius at nisl id, faucibus dapibus metus. Donec sed leo aliquet, porttitor elit in, congue ante. Vestibulum vel lobortis eros. Suspendisse potenti.</p>
-                   
+                    <p>ETL Management provides a dynamic system for Importing, Cleaning and Loading source data a destination Database.</p>
+                    <p>A record of all executed imports is retained by the system.  Details of past imports can be generated from the Reporting page. </p>
+                    <p>Any errors occured during an import are records in the log files that accompany each import. These are available from the Error Logs page. </p>
+                    <p>Click Here to Open <a href="UserGuide/ETL%20Management%20User%20Guide.pdf" target="_blank">User Guide</a> </p>
                 </div>
             </div>
             <!-- closing wrapper-->
-                <div id="footer">
+            <div id="footer">
                 ETL Management 2018 | LYIT | <a href="AdminLogin.aspx">Admin Login</a>
             </div>
 

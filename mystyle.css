@@ -63,31 +63,35 @@
     padding-left: 80px;
     margin-top: 50px;
 }
+
 #LogOutOption {
-    float:right;
-    margin-right:1%;
-    margin-left:-3%;
-    margin-top:1%;
-    margin-bottom:1%;
+    float: right;
+    margin-right: 1%;
+    margin-left: -3%;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
+
     #LogOutOption a {
-        text-decoration:none;
-        color:black;
-        font-weight:bold;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
     }
+
 #menu {
     margin: 0 auto;
+    margin-bottom:5%;
     width: 15%;
-    min-height:550px;
+    min-height: 550px;
     float: left;
     left: 1px;
     position: relative;
-    bottom: 10px;
+    bottom: 2px;
     top: -2px;
     background-image: url('background_tile.jpg');
     padding: 5px 5px 5px 5px;
-    border-right: grey solid 2px;
     border-bottom: grey solid 2px;
+    border-right: grey solid 2px;
 }
 
     #menu h2 {
@@ -110,19 +114,20 @@
             background-color: #57A0D3;
             width: auto;
         }
+
 #footer {
-    margin-left:0%;
-    margin-right:0%;
-   position:relative;
-   bottom:0;
-   left:0;
-   width:98%;
-   padding-top:10px;
+    margin-left: 0%;
+    margin-right: 0%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 98%;
+    padding-top: 10px;
     padding-left: 10px;
-    padding-bottom:0px;
-    height:30px;
-    clear:both;
-    border:grey 2px solid;
+    padding-bottom: 0px;
+    height: 30px;
+    clear: both;
+    border: grey 2px solid;
     background-color: #57A0D3;
     font-family: "Open Sans Condensed";
     font-size: 15px;
@@ -131,8 +136,9 @@
     font-weight: 200;
     line-height: 20px;
 }
+
     #footer a {
-                color: black;
+        color: black;
         text-decoration: none;
     }
 
@@ -161,7 +167,7 @@
 
 #CenterContentCenter {
     margin-left: 31%;
-    margin-right:20%;
+    margin-right: 20%;
 }
 
 #Dropdown {
@@ -190,7 +196,7 @@
 #PageTitleLogsPage {
     margin-bottom: 5%;
     margin-left: 32%;
-        margin-right: 32%;
+    margin-right: 32%;
 }
 
 #PageTitleLeft {
@@ -203,10 +209,11 @@
     margin-left: 10%;
     margin-bottom: 5%;
 }
+
 #CenterContentLogin {
-    margin-left:auto;
-    margin-right:auto;
-    width:30%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
 }
 
 #PageContentCenter {
@@ -219,9 +226,11 @@
     margin-left: 2%;
     margin-bottom: 5%;
 }
+
 #PageContentCenterDelete {
-        margin-left: 22%;
+    margin-left: 22%;
 }
+
 #PageContent a {
     color: blue;
 }
@@ -239,7 +248,7 @@
 }
 
 #PageContentMeta {
-    margin-left: 10%;
+    margin-left: 1%;
 }
 
 #PageContentUpdate {
@@ -251,21 +260,21 @@
     margin-right: 10%;
     margin-left: 10%;
     margin-top: 5%;
-    margin-bottom:2%;
+    margin-bottom: 2%;
 }
 
 #NavButtonsCenter {
     margin-left: 30%;
     margin-right: 30%;
     margin-top: 5%;
-    margin-bottom:2%;
+    margin-bottom: 2%;
 }
 
 #NavButtons1 {
     float: right;
     margin-right: 10%;
     margin-left: 10%;
-    margin-bottom:2%;
+    margin-bottom: 2%;
 }
 
 #NavButtonsLeft {
@@ -273,11 +282,12 @@
     margin-left: 12%;
     margin-right: 30%;
     margin-top: 5%;
-    margin-bottom:2%;
+    margin-bottom: 2%;
 }
+
 #NavButtonsMeta {
-    float:right;
-   margin-right: 10%;
+    float: right;
+    margin-right: 10%;
     margin-left: 10%;
     margin-top: 5%;
 }
@@ -286,11 +296,10 @@
     float: right;
     margin-right: 10%;
     margin-left: 10%;
-
 }
 
 .left {
-    float:left;
+    float: left;
     margin-right: 5%;
     margin-left: 0%;
 }
@@ -313,8 +322,8 @@
 #reportingTable {
     float: right;
     width: 65%;
-    overflow-x:auto;
-        margin-bottom:5%;
+    overflow-x: auto;
+    margin-bottom: 5%;
 }
 
 #reportingFilters {
@@ -324,7 +333,7 @@
     max-width: 300px;
     padding: 5px 0px 5px 15px;
     background-color: #57A0D3;
-    margin-bottom:5%;
+    margin-bottom: 5%;
 }
 
 #ProcessingImage {
@@ -346,40 +355,57 @@
 #Update_LookBack {
     margin-bottom: 5%;
 }
-#updateMetaData{margin-bottom:5%;}
 
-hr { 
+#updateMetaData {
+    margin-bottom: 5%;
+}
+
+hr {
     display: block;
     margin-top: 1%;
     margin-bottom: 5%;
     margin-left: 10%;
     margin-right: 10%;
-    border-style:inset;
+    border-style: inset;
     border-width: 1px;
 }
+
 #HomePageRight {
-    float:right;
+    float: right;
     margin-right: auto;
-    overflow:auto;
-    width:60%;
-    min-height:350px;
-    max-height:600px;
+    overflow: auto;
+    width: 60%;
+    min-height: 350px;
+    max-height: 600px;
 }
-#HomePageRight h3 {
-margin-left:35%;
-margin-right:35%;
-}
+
+    #HomePageRight h3 {
+        margin-left: 35%;
+        margin-right: 35%;
+    }
+
 #HomePageLeft {
-    float:left;
-    margin-right:auto;
-    margin-left:1%;
-    overflow:auto;
-    width:30%;
-    min-height:350px;
-        max-height:600px;
+    float: left;
+    margin-right: auto;
+    margin-left: 1%;
+    overflow: auto;
+    width: 30%;
+    min-height: 350px;
+    max-height: 600px;
 }
+
 .toolTip {
-    width:20px;
-        background-color: #57A0D3;
-        text-align:center;
+    width: 20px;
+    background-color: #57A0D3;
+    text-align: center;
+}
+
+.adminLoginFooter {
+    margin-top: 25px;
+}
+r;
+}
+.adminLoginFooter {
+    position:absolute;
+    bottom:0;
 }

@@ -28,7 +28,7 @@ namespace ELTManagement
         private void LoadRecentImports()
         {
             //Get the connection string from an App Config object
-            AppConfig Appdata = new AppConfig();
+            ETLComponents.AppConfig Appdata = new ETLComponents.AppConfig();
             SqlConnection conn = new SqlConnection(Appdata.ConnectionString);
             string commandText = "SELECT TOP 8 H.ProcessName,S.StatusName,H.StartTime,H.EndTime,H.RowsInserted,H.RowsDeleted FROM [Project].[dbo].[JobRunHistory] H JOIN [dbo].[JobStatus] S ON H.StatusId = S.StatusID ORDER BY H.StartTime DESC; ";
             SqlCommand comm = new SqlCommand();

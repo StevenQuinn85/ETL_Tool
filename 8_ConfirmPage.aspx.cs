@@ -16,7 +16,7 @@ namespace ELTManagement
 
         SqlConnection conn = new SqlConnection();
 
-        AppConfig AppData;
+        ETLComponents.AppConfig AppData;
 
         //int NumberOfColumns;
         Dictionary<string, string> DataProperties = new Dictionary<string, string>();
@@ -34,7 +34,7 @@ namespace ELTManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             //Set the SQL connection Conn to use the Back End DB
-            AppData = new AppConfig();
+            AppData = new ETLComponents.AppConfig();
             conn.ConnectionString = AppData.ConnectionString;
             
 

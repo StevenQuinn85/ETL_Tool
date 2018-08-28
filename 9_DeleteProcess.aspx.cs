@@ -14,7 +14,7 @@ namespace ELTManagement
     public partial class _9_DeleteProcess : System.Web.UI.Page
     {
         //The application will pull it's SQL Connection to the back end DB from this object
-        AppConfig AppData;
+        ETLComponents.AppConfig AppData;
 
         //Deleting a process will require a connection to the Back End DB
         SqlConnection conn = new SqlConnection();
@@ -22,7 +22,7 @@ namespace ELTManagement
         protected void Page_Load(object sender, EventArgs e)
         {            
             //Use the connection string from the app data object to connect to the back end DB
-            AppData = new AppConfig();
+            AppData = new ETLComponents.AppConfig();
             conn.ConnectionString = AppData.ConnectionString;
 
             if (!IsPostBack)

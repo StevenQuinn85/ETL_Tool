@@ -44,14 +44,14 @@
                                 <label>Username: </label>
                             </td>
                             <td>
-                                <asp:TextBox ID="txt_Username" runat="server"></asp:TextBox></td>
+                                <asp:TextBox ID="txt_Username" runat="server" Width="200px"></asp:TextBox></td>
                         </tr>
                         <tr>
                             <td>
                                 <label>Password: </label>
                             </td>
                             <td>
-                                <asp:TextBox ID="txt_password" runat="server" TextMode="Password"></asp:TextBox></td>
+                                <asp:TextBox ID="txt_password" runat="server" TextMode="Password" Width="200px"></asp:TextBox></td>
                         </tr>
                         <tr>
                             <td>

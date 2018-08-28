@@ -20,7 +20,7 @@ namespace ELTManagement
         SqlConnection conn = new SqlConnection();
 
         //The application will pull it's SQL Connection to the back end DB from this object
-        AppConfig AppData;
+        ETLComponents.AppConfig AppData;
 
         //A list of Text boxes that will hold the Source information that will be used to provide
         //data for the update command 
@@ -47,7 +47,7 @@ namespace ELTManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            AppData = new AppConfig();
+            AppData = new ETLComponents.AppConfig();
             conn.ConnectionString = AppData.ConnectionString;
 
             datasetName = (string)Session["datasetName"];

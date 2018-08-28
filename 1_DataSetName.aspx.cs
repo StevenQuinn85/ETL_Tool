@@ -21,7 +21,7 @@ namespace ELTManagement.DataEntryForms
         Dictionary<string, string> DataProperties = new Dictionary<string, string>();
 
         //The application will pull it's SQL Connection to the back end DB from this object
-        AppConfig AppData;
+        ETLComponents.AppConfig AppData;
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -85,7 +85,7 @@ namespace ELTManagement.DataEntryForms
             SqlConnection conn = new SqlConnection();
 
             //Pull the back end DB connection from the AppData object
-            AppData = new AppConfig();
+            AppData = new ETLComponents.AppConfig();
             conn.ConnectionString = AppData.ConnectionString;
 
             //Create an SQL Command to quer the back end database

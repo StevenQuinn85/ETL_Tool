@@ -9,7 +9,7 @@ using System.Data;
 using System.IO;
 
 
-namespace ELTManagement
+namespace ETLComponents
 {
     public class Program
     {

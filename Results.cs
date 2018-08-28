@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace ELTManagement
+namespace ETLComponents
 {
     public class Results
     {
@@ -59,7 +59,9 @@ namespace ELTManagement
         public void UpdateJobHistoryTableStart()
         {
             SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+            AppConfig appData = new AppConfig();
+            conn.ConnectionString = appData.ConnectionString;
+
             string commandText = "INSERT INTO [dbo].[JobRunHistory] (ProcessName, StatusId, StartTime,LogName) VALUES (@ProcessName, @StatusId, @StartTime, @LogName)";
             SqlCommand comm = new SqlCommand(commandText, conn);
             //Insert the name of the dataset being import, the statusid is 1 which representing running, and the start time of the import.
@@ -126,7 +128,9 @@ namespace ELTManagement
 
             SqlConnection conn = new SqlConnection();
             SqlCommand comm = new SqlCommand();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["BackEndDB"].ConnectionString;
+
+            AppConfig appData = new AppConfig();
+            conn.ConnectionString = appData.ConnectionString;
             string commandText = "	  UPDATE [dbo].[JobRunHistory] SET [StatusId] = @Status, [EndTime] = @EndTime,  [RowsInserted] = @Inserted, [RowsDeleted] = @Deleted, [RowsRejected] = @Rejected WHERE JobId = @JobId";
             comm.Connection = conn;
             comm.CommandText = commandText;

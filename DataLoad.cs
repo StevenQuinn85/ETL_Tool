@@ -8,7 +8,7 @@ using System.Data.OleDb;
 using System.Data.OracleClient;
 
 
-namespace ELTManagement
+namespace ETLComponents
 {
     public class DataLoad
     {

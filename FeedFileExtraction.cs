@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Data;
 using System.IO;
 
-namespace ELTManagement
+namespace ETLComponents
 {
-    class FeedFileExtraction:Extraction
+    public class FeedFileExtraction:Extraction
     {
         //This class contains the code to open all file and read entries.
         //It returns the entries as a dataset object.

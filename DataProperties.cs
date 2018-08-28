@@ -4,9 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 
-namespace ELTManagement
+namespace ETLComponents
 {
-    public class DataProperties
+    //This class stores all of the properties about import processes
+    //The class uses the custom c# object Metadata to store metadata about
+    //the source data.
+     public class DataProperties
     {
         public MetaData Meta;
 

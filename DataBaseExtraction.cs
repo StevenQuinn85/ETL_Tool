@@ -8,9 +8,11 @@ using System.Data.SqlClient;
 using System.Data.OleDb;
 using System.Data.OracleClient;
 
-namespace ELTManagement
+namespace ETLComponents
 {
-    class DataBaseExtraction: Extraction
+    //This class is used to connect to a source database and extract 
+    //the raw data for the import
+   public class DataBaseExtraction: Extraction
     {
         public DataBaseExtraction(DataProperties DataProp): base (DataProp)
         {

@@ -7,8 +7,9 @@ using System.Data.SqlClient;
 using System.Data.OleDb;
 using System.Data.OracleClient;
 
-namespace ELTManagement
+namespace ETLComponents
 {
+
     public class DirectConnect
     {
         //Count of rows imported

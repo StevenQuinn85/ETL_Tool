@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Diagnostics;
 
-namespace ELTManagement
+namespace ETLComponents
 {
-    class Transformation
+    //This class will clean the raw data that is extracted from the source and 
+    //provide an accepted dataset
+    public class Transformation
     {
         DataTable acceptedData; 
         MetaData MetaDataRules;
@@ -173,28 +175,50 @@ namespace ELTManagement
 
                     }
 
-                    if (rowAcceptable)
-                    {
-                        acceptedData.ImportRow(Table.Rows[i]);
-                        rowsAcceptedCount++;
+                    //if (rowAcceptable)
+                    //{
+                    //    acceptedData.ImportRow(Table.Rows[i]);
+                    //    rowsAcceptedCount++;
 
-                        //Reset row acceptable value
-                        rowAcceptable = true;
-                        rowId = "";
-                        Errors = "";
-                    }
-                    else
-                    {
-                        errorsList.Add("Row: " + rowId, Errors);
+                    //    //Reset row acceptable value
+                    //    rowAcceptable = true;
+                    //    rowId = "";
+                    //    Errors = "";
+                    //}
+                    //else
+                    //{
+                    //    errorsList.Add("Row: " + rowId, Errors);
 
-                        rowsRejectedCount++;
+                    //    rowsRejectedCount++;
 
-                        //Reset row acceptable value
-                        rowAcceptable = true;
-                        rowId = "";
-                        Errors = "";
-                    }
+                    //    //Reset row acceptable value
+                    //    rowAcceptable = true;
+                    //    rowId = "";
+                    //    Errors = "";
+                    //}
 
+                }
+
+                if (rowAcceptable)
+                {
+                    acceptedData.ImportRow(Table.Rows[i]);
+                    rowsAcceptedCount++;
+
+                    //Reset row acceptable value
+                    rowAcceptable = true;
+                    rowId = "";
+                    Errors = "";
+                }
+                else
+                {
+                    errorsList.Add("Row: " + rowId, Errors);
+
+                    rowsRejectedCount++;
+
+                    //Reset row acceptable value
+                    rowAcceptable = true;
+                    rowId = "";
+                    Errors = "";
                 }
             }
 

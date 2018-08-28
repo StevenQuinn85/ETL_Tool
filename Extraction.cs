@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace ELTManagement
+namespace ETLComponents
 {
-    class Extraction
+    //This class is the parent extraction class. Any class that
+    //peforms extraction of raw data will inherit from this one.
+    public class Extraction
     {
         protected DataProperties dataProp;
         protected DataSet RawData;

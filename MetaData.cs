@@ -4,8 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 
-namespace ELTManagement
+namespace ETLComponents
 {
+    //This class stores all of the metadata about the data source
+    //It is established and used by the Data Properties object
+
     public class MetaData
     {
         SqlConnection conn;

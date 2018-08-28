@@ -4,8 +4,11 @@ using System.Linq;
 using System.Web;
 using System.IO;
 
-namespace ELTManagement
+namespace ETLComponents
 {
+    //This class will retrieve the connection string to the backend BD
+    //and the location of where to store the log files. This information 
+    //will be store in the appdata.txt file in 
     public class AppConfig
     {
         private string connectionString, logFileLocation; 
@@ -21,6 +24,7 @@ namespace ELTManagement
         {
             //Retrieve the Connection String and Log File Location
             string FileLocation = HttpContext.Current.Server.MapPath("/").ToString();
+           
 
             //remove the final '\ETLManagement'
             int stepOne = FileLocation.LastIndexOf("E");
